@@ -16,4 +16,11 @@ const getUserSchema = joi.object({
     id: id.required()
 })
 
-module.exports = {createUserSchema, getUserSchema}
+const username = joi.string().min(4).max(15)
+
+const createAdminSchema = joi.object({
+    user: createUserSchema,
+    username: username.required()
+})
+
+module.exports = {createUserSchema, getUserSchema, createAdminSchema }

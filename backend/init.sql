@@ -15,7 +15,7 @@ CREATE TABLE users(
 
 CREATE TABLE admins(
     user_id INT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
+    username VARCHAR(15) NOT NULL,
     UNIQUE(username)
 );
 
