@@ -2,6 +2,8 @@ const express = require('express')
 const { createClientSchema, deleteClientSchema, updateClientSchema } = require('../../schemas/user')
 const ClientService = require('../../services/user/client.service')
 const adminRouteMiddleWare = require('../../middlewares')
+const boom  = require("@hapi/boom");
+const { checkAuthToken } = require('../../middlewares/authHandler');
 
 const router = express.Router()
 const clientService = new ClientService()
@@ -44,6 +46,8 @@ router.patch("/", adminRouteMiddleWare(updateClientSchema), async (req, res, nex
         if (!updatedClient) {
             throw boom.notFound(`Client not found`);
         }
+        delete updatedClient.dataValues.user_id
+        delete updatedClient.user.dataValues.password
         res.status(201).json({
             message: 'client updated',
             data: updatedClient

@@ -17,7 +17,7 @@ class ClientService extends UserService {
             const client = await models.Client.create(data.client, { transaction })
             transaction.commit()
             return client
-        } catch(error) {
+        } catch (error) {
             if (transaction) {
                 transaction.rollback()
             }
@@ -50,22 +50,20 @@ class ClientService extends UserService {
     }
 
     async updateClientByCedula(data) {
-        const client = await models.Client.update(
+        const client = await this.findByCedula(data.cedula)
+        console.log(`client: ${client.user}`)
+        if (!client || !client.user) {
+            return client
+        }
+        await client.update(
             {
                 address: data.address,
-                cellphone_number: data.cellphone_number,
-                user: {
-                    name: data.name
-                }
-            },
-            {
-                where: {
-                    cedula: data.cedula
-                },
-                returning: true,
-                plain: true
+                cellphone_number: data.cellphone_number
             }
         )
+        await client.user.update({
+            name: data.name
+        })
         return client
     }
 }
