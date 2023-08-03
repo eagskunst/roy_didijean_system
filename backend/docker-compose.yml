@@ -1,10 +1,11 @@
-version: “3.8”
+version: "3.8"
 
 services:
   mysql:
+    platform: linux/amd64
     image: mysql:5
     environment:
-        - MYSQL_DATABASE=my_store
+        - MYSQL_DATABASE=roy_didijean
         - MYSQL_ROOT_USER=root
         - MYSQL_ROOT_PASSWORD=admin123
         - MYSQL_PORT=3306
@@ -12,7 +13,10 @@ services:
         - "3306:3306"
     volumes:
         - ./mysql_data:/var/lib/mysql
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --init-file /docker-entrypoint-initdb.d/init.sql
   phpmyadmin:
+    platform: linux/amd64
     image: phpmyadmin/phpmyadmin
     environment:
       - MYSQL_ROOT_PASSWORD=admin123

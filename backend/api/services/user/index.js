@@ -8,8 +8,8 @@ class UserService {
     return res;
   }
 
-  async create(data){
-    const res = await models.User.create(data)
+  async create(data, transaction){
+    const res = await models.User.create(data, { transaction })
     return res
   }
 
