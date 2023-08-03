@@ -10,24 +10,25 @@ class AuthService {
   constructor(){}
 
   async getUser(username, password){
-    const user = await adminService.findByUsername(username);
-    if (!user) {
+    const admin = await adminService.findByUsername(username);
+    if (!admin) {
       throw boom.notFound(`User not found`);
     }
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, admin.user.password);
     if (!isMatch) {
       throw boom.badRequest("Password is incorrect");
     }
-    delete user.dataValues.password;
-    return user;
+    delete admin.user.dataValues.password;
+    delete admin.dataValues.user_id;
+    return admin;
   }
 
-  signToken(user){
+  signToken(admin){
     const token = jwt.sign({
-      sub: user.id,
+      sub: admin.user.id,
     }, config.secretKey)
     return {
-      user,
+      admin,
       token
     }
   }

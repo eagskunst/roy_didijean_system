@@ -32,4 +32,8 @@ const createClientSchema = joi.object({
     cellphone_number: cellphone_number
 })
 
-module.exports = { createUserSchema, getUserSchema, createAdminSchema, createClientSchema }
+const deleteClientSchema = joi.object({
+    cedula: cedula.required()
+})
+
+module.exports = { createUserSchema, getUserSchema, createAdminSchema, createClientSchema, deleteClientSchema }

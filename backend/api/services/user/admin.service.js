@@ -30,13 +30,13 @@ class AdminService extends UserService {
         const admin = await models.Admin.findOne({
             where: {
                 username: username
+            },
+            include: {
+                model: models.User,
+                as: 'user'
             }
         })
-        if (!admin) {
-            return admin
-        }
-        const user = await super.findOne(admin.user_id)
-        return user
+        return admin
     }
 }
 

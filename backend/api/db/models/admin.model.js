@@ -16,8 +16,12 @@ const AdminSchema = {
 }
 
 class Admin extends Model {
-    static associate() {
-        //associate
+    static associate(models) {
+        this.belongsTo(models.User, { 
+            as: "user",
+            foreignKey: "user_id",
+            allowNull: false
+         })
     }
 
     static config(sequelize) {

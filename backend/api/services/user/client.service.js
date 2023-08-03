@@ -25,16 +25,24 @@ class ClientService extends UserService {
     }
 
     async findByCedula(cedula) {
-        const admin = await models.Client.findOne({
+        const client = await models.Client.findOne({
             where: {
                 cedula: cedula
+            },
+            include: {
+                model: models.User,
+                as: 'user'
             }
         })
-        if (!admin) {
-            return admin
-        }
-        const user = await super.findOne(admin.user_id)
-        return user
+        return client
+    }
+
+    async deleteClientByCedula(cedula) {
+        const client = await this.findByCedula(cedula)
+        const user = client.user
+        const clientDeletedResult = await client.destroy()
+        await user.destroy()
+        return clientDeletedResult
     }
 }
 
