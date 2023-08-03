@@ -3,6 +3,7 @@ const { createAdminSchema, deleteAdminSchema, updateAdminSchema } = require('../
 const AdminService = require('../../services/user/admin.service')
 const adminRouteMiddleWare = require('../../middlewares')
 const boom = require("@hapi/boom");
+const { checkAuthToken } = require('../../middlewares/authHandler');
 
 const router = express.Router()
 const adminService = new AdminService()
@@ -43,7 +44,7 @@ router.patch("/", adminRouteMiddleWare(updateAdminSchema), async (req, res, next
     const body = req.body
     const updatedAdmin = await adminService.updateAdminByUsername(body)
     if (!updatedAdmin) {
-      throw boom.notFound(`Client not found`);
+      throw boom.notFound(`Admin not found`);
     }
     delete updatedAdmin.dataValues.user_id
     delete updatedAdmin.user.dataValues.password
@@ -52,6 +53,33 @@ router.patch("/", adminRouteMiddleWare(updateAdminSchema), async (req, res, next
       data: updatedAdmin
     })
   } catch (error) {
+    next(error)
+  }
+})
+
+router.get("/", checkAuthToken, async (req, res, next) => {
+  try {
+    const admins = await adminService.getAll()
+    res.status(201).json({
+      admins
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get("/:username", checkAuthToken, async (req, res, next) => {
+  try {
+    const admin = await adminService.findByUsername(req.params.username)
+    if (!admin) {
+      throw boom.notFound(`Admin not found`);
+    }
+    delete admin.dataValues.user_id
+    delete admin.user.dataValues.password
+    res.status(201).json({
+      admin
+    })
+  } catch(error) {
     next(error)
   }
 })

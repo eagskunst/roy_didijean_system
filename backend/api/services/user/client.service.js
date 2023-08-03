@@ -66,6 +66,21 @@ class ClientService extends UserService {
         })
         return client
     }
+
+    async getAll() {
+        return await models.Client.findAll({
+            attributes: {
+                exclude: ['user_id']
+            },
+            include: {
+                model: models.User,
+                as: 'user',
+                attributes:  {
+                    exclude: ['password']
+                }
+            }
+        })
+    }
 }
 
 module.exports = ClientService

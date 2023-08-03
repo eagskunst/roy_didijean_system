@@ -63,6 +63,21 @@ class AdminService extends UserService {
         })
         return admin
     }
+
+    async getAll() {
+        return await models.Admin.findAll({
+            attributes: {
+                exclude: ['user_id']
+            },
+            include: {
+                model: models.User,
+                as: 'user',
+                attributes:  {
+                    exclude: ['password']
+                }
+            }
+        })
+    }
 }
 
 module.exports = AdminService

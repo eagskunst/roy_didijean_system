@@ -2,7 +2,7 @@ const express = require('express')
 const { createClientSchema, deleteClientSchema, updateClientSchema } = require('../../schemas/user')
 const ClientService = require('../../services/user/client.service')
 const adminRouteMiddleWare = require('../../middlewares')
-const boom  = require("@hapi/boom");
+const boom = require("@hapi/boom");
 const { checkAuthToken } = require('../../middlewares/authHandler');
 
 const router = express.Router()
@@ -51,6 +51,30 @@ router.patch("/", adminRouteMiddleWare(updateClientSchema), async (req, res, nex
         res.status(201).json({
             message: 'client updated',
             data: updatedClient
+        })
+    } catch (error) {
+        next(error)
+    }
+})
+router.get("/", checkAuthToken, async (req, res, next) => {
+    try {
+        const clients = await clientService.getAll()
+        res.status(201).json({ clients })
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get("/:cedula", checkAuthToken, async (req, res, next) => {
+    try {
+        const client = await clientService.findByCedula(req.params.cedula)
+        if (!client) {
+            throw boom.notFound(`Client not found`);
+        }
+        delete client.dataValues.user_id
+        delete client.user.dataValues.password
+        res.status(201).json({
+            client
         })
     } catch (error) {
         next(error)
