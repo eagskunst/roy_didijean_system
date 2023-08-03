@@ -6,7 +6,7 @@ const router = express.Router();
 const service = new AuthService()
 
 router.post('/login',
-  passport.authenticate('local', {session: false}),
+  passport.authenticate('local', { session: false }),
   async (req, res, next) => {
     try {
       const user = req.user

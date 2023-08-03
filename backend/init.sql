@@ -53,3 +53,9 @@ CREATE TABLE garment_color(
     garment_id INT NOT NULL,
     color VARCHAR(15) NOT NULl
 );
+
+INSERT INTO users (email, password, name, created_date)
+VALUES ('tony@stark.com', '$2b$10$FLyOaZ2FxlmU8h3xDws1fukjpVW5/8j9yvLzLpv0oYnlRRcSbMNqO', 'Tony Stark', CURDATE());
+
+INSERT INTO admins (user_id, username)
+VALUES (1, tony.stark);
