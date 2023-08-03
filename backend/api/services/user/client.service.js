@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const UserService = require('.');
 const sequelize = require('../../lib/sequelize')
 const models = sequelize.models;
@@ -39,10 +40,33 @@ class ClientService extends UserService {
 
     async deleteClientByCedula(cedula) {
         const client = await this.findByCedula(cedula)
+        if (!client) {
+            return client
+        }
         const user = client.user
         const clientDeletedResult = await client.destroy()
         await user.destroy()
         return clientDeletedResult
+    }
+
+    async updateClientByCedula(data) {
+        const client = await models.Client.update(
+            {
+                address: data.address,
+                cellphone_number: data.cellphone_number,
+                user: {
+                    name: data.name
+                }
+            },
+            {
+                where: {
+                    cedula: data.cedula
+                },
+                returning: true,
+                plain: true
+            }
+        )
+        return client
     }
 }
 
