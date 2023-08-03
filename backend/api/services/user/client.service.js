@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const UserService = require('.');
 const sequelize = require('../../lib/sequelize')
 const models = sequelize.models;
@@ -16,7 +17,7 @@ class ClientService extends UserService {
             const client = await models.Client.create(data.client, { transaction })
             transaction.commit()
             return client
-        } catch(error) {
+        } catch (error) {
             if (transaction) {
                 transaction.rollback()
             }
@@ -25,16 +26,60 @@ class ClientService extends UserService {
     }
 
     async findByCedula(cedula) {
-        const admin = await models.Client.findOne({
+        const client = await models.Client.findOne({
             where: {
                 cedula: cedula
+            },
+            include: {
+                model: models.User,
+                as: 'user'
             }
         })
-        if (!admin) {
-            return admin
+        return client
+    }
+
+    async deleteClientByCedula(cedula) {
+        const client = await this.findByCedula(cedula)
+        if (!client) {
+            return client
         }
-        const user = await super.findOne(admin.user_id)
-        return user
+        const user = client.user
+        const clientDeletedResult = await client.destroy()
+        await user.destroy()
+        return clientDeletedResult
+    }
+
+    async updateClientByCedula(data) {
+        const client = await this.findByCedula(data.cedula)
+        console.log(`client: ${client.user}`)
+        if (!client || !client.user) {
+            return client
+        }
+        await client.update(
+            {
+                address: data.address,
+                cellphone_number: data.cellphone_number
+            }
+        )
+        await client.user.update({
+            name: data.name
+        })
+        return client
+    }
+
+    async getAll() {
+        return await models.Client.findAll({
+            attributes: {
+                exclude: ['user_id']
+            },
+            include: {
+                model: models.User,
+                as: 'user',
+                attributes:  {
+                    exclude: ['password']
+                }
+            }
+        })
     }
 }
 

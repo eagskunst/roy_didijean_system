@@ -35,8 +35,15 @@ const UserSchema = {
 }
 
 class User extends Model {
-  static associate(){
-    //associate
+  static associate(models){
+    this.hasOne(models.Client, {
+      foreignKey: 'user_id',
+      allowNull: true
+    })
+    this.hasOne(models.Admin, {
+      foreignKey: 'user_id',
+      allowNull: true
+    })
   }
   static config(sequelize){
     return {

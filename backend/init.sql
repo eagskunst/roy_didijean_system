@@ -18,6 +18,7 @@ CREATE TABLE admins(
     username VARCHAR(15) NOT NULL,
     UNIQUE(username),
     FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE clients(
@@ -27,6 +28,7 @@ CREATE TABLE clients(
     cellphone_number VARCHAR(15),
     UNIQUE(user_id, cedula),
     FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE products(
@@ -60,4 +62,4 @@ INSERT INTO users (email, password, name, created_date)
 VALUES ('tony@stark.com', '$2b$10$FLyOaZ2FxlmU8h3xDws1fukjpVW5/8j9yvLzLpv0oYnlRRcSbMNqO', 'Tony Stark', CURDATE());
 
 INSERT INTO admins (user_id, username)
-VALUES (1, tony.stark);
+VALUES (1, 'tony.stark');

@@ -32,4 +32,29 @@ const createClientSchema = joi.object({
     cellphone_number: cellphone_number
 })
 
-module.exports = { createUserSchema, getUserSchema, createAdminSchema, createClientSchema }
+const deleteClientSchema = joi.object({
+    cedula: cedula.required()
+})
+
+const updateClientSchema = joi.object({
+    cedula: cedula.required(),
+    name: name.required(),
+    address: address.required(),
+    cellphone_number: cellphone_number
+})
+
+const deleteAdminSchema = joi.object({
+    username: username.required()
+})
+
+const updateAdminSchema = joi.object({
+    name: name.required(),
+    username: username.required(),
+    newUsername: username.required()
+})
+
+module.exports = {
+    createUserSchema, getUserSchema, createAdminSchema,
+    createClientSchema, deleteClientSchema, updateClientSchema, 
+    deleteAdminSchema, updateAdminSchema
+}

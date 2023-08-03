@@ -30,13 +30,53 @@ class AdminService extends UserService {
         const admin = await models.Admin.findOne({
             where: {
                 username: username
+            },
+            include: {
+                model: models.User,
+                as: 'user'
             }
         })
+        return admin
+    }
+
+    async delete(username) {
+        const admin = await this.findByUsername(username)
         if (!admin) {
             return admin
         }
-        const user = await super.findOne(admin.user_id)
-        return user
+        const user = admin.user
+        const adminDeletedResult = await admin.destroy()
+        await user.destroy()
+        return adminDeletedResult
+    }
+
+    async updateAdminByUsername(data) {
+        const admin = await this.findByUsername(data.username)
+        if (!admin || !admin.user) {
+            return admin
+        }
+        await admin.update({
+            username: data.newUsername
+        })
+        await admin.user.update({
+            name: data.name
+        })
+        return admin
+    }
+
+    async getAll() {
+        return await models.Admin.findAll({
+            attributes: {
+                exclude: ['user_id']
+            },
+            include: {
+                model: models.User,
+                as: 'user',
+                attributes:  {
+                    exclude: ['password']
+                }
+            }
+        })
     }
 }
 
