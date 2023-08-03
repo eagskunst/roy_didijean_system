@@ -2,7 +2,7 @@ const UserService = require('.');
 const sequelize = require('../../lib/sequelize')
 const models = sequelize.models;
 
-class AdminService extends UserService {
+class ClientService extends UserService {
     constructor() {
         super()
     }
@@ -12,12 +12,10 @@ class AdminService extends UserService {
         try {
             transaction = t ?? await sequelize.transaction();
             const res = await super.create(data.user, transaction)
-            const admin = await models.Admin.create({
-                "user_id": res.id,
-                "username": data.username
-            }, { transaction })
+            data.client.user_id = res.id
+            const client = await models.Client.create(data.client, { transaction })
             transaction.commit()
-            return admin
+            return client
         } catch(error) {
             if (transaction) {
                 transaction.rollback()
@@ -26,10 +24,10 @@ class AdminService extends UserService {
         }
     }
 
-    async findByUsername(username) {
-        const admin = await models.Admin.findOne({
+    async findByCedula(cedula) {
+        const admin = await models.Client.findOne({
             where: {
-                username: username
+                cedula: cedula
             }
         })
         if (!admin) {
@@ -40,4 +38,4 @@ class AdminService extends UserService {
     }
 }
 
-module.exports = AdminService
+module.exports = ClientService

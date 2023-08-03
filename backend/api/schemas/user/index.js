@@ -4,7 +4,9 @@ const id = joi.number().integer()
 const name = joi.string().min(3)
 const password = joi.string().min(8)
 const email = joi.string().email()
-const last_session_timestamp = joi.string()
+const cedula = joi.string().max(20)
+const address = joi.string().max(50)
+const cellphone_number = joi.string().max(15)
 
 const createUserSchema = joi.object({
     email: email.required(),
@@ -23,4 +25,11 @@ const createAdminSchema = joi.object({
     username: username.required()
 })
 
-module.exports = {createUserSchema, getUserSchema, createAdminSchema }
+const createClientSchema = joi.object({
+    user: createUserSchema,
+    cedula: cedula.required(),
+    address: address.required(),
+    cellphone_number: cellphone_number
+})
+
+module.exports = { createUserSchema, getUserSchema, createAdminSchema, createClientSchema }

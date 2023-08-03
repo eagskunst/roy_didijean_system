@@ -16,15 +16,17 @@ CREATE TABLE users(
 CREATE TABLE admins(
     user_id INT PRIMARY KEY,
     username VARCHAR(15) NOT NULL,
-    UNIQUE(username)
+    UNIQUE(username),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE clients(
     user_id INT PRIMARY KEY,
     cedula VARCHAR(20) NOT NULL,
-    address VARCHAR(20) NOT NULL,
+    address VARCHAR(50) NOT NULL,
     cellphone_number VARCHAR(15),
-    UNIQUE(user_id, cedula)
+    UNIQUE(user_id, cedula),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE products(
