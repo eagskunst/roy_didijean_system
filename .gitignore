@@ -106,6 +106,8 @@ dist
 
 mysql_data/
 
+backend/docker-compose.yml
+
 # Docusaurus cache and generated files
 .docusaurus
 

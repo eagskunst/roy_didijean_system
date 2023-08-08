@@ -1,37 +1,48 @@
-const { Model, DataTypes } = require('sequelize')
+const { Model, DataTypes, Sequelize} = require('sequelize')
 const { USER_TABLE } = require('./user.model')
 
 const CLIENT_TABLE = "clients"
 
 const ClientSchema = {
-    user_id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-        references: {
-            model: USER_TABLE,
-            key: 'id'
-        },
-        onDelete: 'CASCADE'
-    },
-    cedula: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        unique: true
-    },
-    address: {
-        allowNull: false,
-        type: DataTypes.STRING
-    },
-    cellphone_number: {
-        allowNull: true,
-        type: DataTypes.STRING
-    }
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.INTEGER
+  },
+  user_id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      references: {
+          model: USER_TABLE,
+          key: 'id'
+      },
+      onDelete: 'CASCADE'
+  },
+  cedula: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true
+  },
+  address: {
+      allowNull: false,
+      type: DataTypes.STRING
+  },
+  cellphone_number: {
+      allowNull: true,
+      type: DataTypes.STRING
+  },
+  created_date: {
+    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: Sequelize.NOW
+  }
 }
 
 class Client extends Model {
     static associate(models) {
-        this.belongsTo(models.User, { 
+        this.belongsTo(models.User, {
             as: "user",
             foreignKey: "user_id",
             allowNull: false
