@@ -26,7 +26,9 @@ class AuthService {
   signToken(admin){
     const token = jwt.sign({
       sub: admin.user.id,
-    }, config.secretKey)
+    }, config.secretKey, {
+      // expiresIn: '1h'
+    })
     return {
       admin,
       token
