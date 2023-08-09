@@ -12,6 +12,16 @@ const independentService = new IndependentService()
 const providerService = new ProviderService()
 const companyService = new CompanyService()
 
+/**
+ * @swagger
+ * /api/provider:
+ *  get:
+ *    summary: get all providers
+ *    tags: [providers]
+ *    responses:
+ *      200:
+ *        description: get clients
+ */
 router.get('/', async(req, res, next) => {
   try {
     const data = await providerService.find()
@@ -23,52 +33,21 @@ router.get('/', async(req, res, next) => {
   }
 })
 
-router.get('/independent', async(req, res, next) => {
-  try {
-    const data = await independentService.find()
-    res.json({
-      data: data
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/company', async(req, res, next) => {
-  try {
-    const data = await companyService.find()
-    res.json({
-      data: data
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/independent/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
-  try {
-    const {id} = req.params
-    const data = await independentService.findOne(id)
-    res.json({
-      data: data
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/company/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
-  try {
-    const {id} = req.params
-    const data = await companyService.findOne(id)
-    res.json({
-      data: data
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
+/**
+ * @swagger
+ * /api/provider/{id}:
+ *  get:
+ *    summary: get provider by id
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get providers
+ */
 router.get('/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
@@ -81,7 +60,162 @@ router.get('/:id', validatorHandler(getBySchema, 'params'), async(req, res, next
   }
 })
 
-router.post('/create/independent',
+/**
+ * @swagger
+ * /api/provider/independent:
+ *  get:
+ *    summary: get all independent providers
+ *    tags: [providers]
+ *    responses:
+ *      200:
+ *        description: get independent clients
+ */
+router.get('/independent', async(req, res, next) => {
+  try {
+    const data = await independentService.find()
+    res.json({
+      data: data
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+/**
+ * @swagger
+ * /api/provider/company:
+ *  get:
+ *    summary: get all company providers
+ *    tags: [providers]
+ *    responses:
+ *      200:
+ *        description: get company clients
+ */
+router.get('/company', async(req, res, next) => {
+  try {
+    const data = await companyService.find()
+    res.json({
+      data: data
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/**
+ * @swagger
+ * /api/provider/independent/{id}:
+ *  get:
+ *    summary: get independent by id
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get independents
+ */
+router.get('/independent/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+  try {
+    const {id} = req.params
+    const data = await independentService.findOne(id)
+    res.json({
+      data: data
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/**
+ * @swagger
+ * /api/provider/company/{id}:
+ *  get:
+ *    summary: get company by id
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get companys
+ */
+router.get('/company/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+  try {
+    const {id} = req.params
+    const data = await companyService.findOne(id)
+    res.json({
+      data: data
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    create independent:
+ *      type: object
+ *      properties:
+ *        birthDate:
+ *          type: string
+ *          description: independent birthDate number
+ *        cedula:
+ *          type: string
+ *          description: independent cedula
+ *        provider:
+ *          type: object
+ *          description: provider data
+ *          properties:
+ *            email:
+ *              type: string
+ *              description: independent email
+ *            address:
+ *              type: string
+ *              description: independent address
+ *            name:
+ *              type: string
+ *              description: independent name
+ *            phone_number:
+ *              type: string
+ *              description: independent number
+ *      required:
+ *        - cedula
+ *        - provider
+ *      example:
+ *        birthDate: '03/02/1999'
+ *        cedula: '27271032'
+ *        provider:
+ *          email: hanjo@momazo.com
+ *          address: las uwuquenas
+ *          name: hanjo mora
+ *          phone_number: '04147658833'
+ */
+
+/**
+ * @swagger
+ * /api/provider/independent:
+ *  post:
+ *    summary: create independent provider
+ *    tags: [providers]
+ *    requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/create independent'
+ *    responses:
+ *      200:
+ *        description: independent provider created ok
+ */
+router.post('/independent',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createInpendentSchema, 'body'), async(req, res, next) => {
   try {
@@ -96,7 +230,65 @@ router.post('/create/independent',
   }
 })
 
-router.post('/create/company',
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    create company:
+ *      type: object
+ *      properties:
+ *        company_name:
+ *          type: string
+ *          description: company company_name number
+ *        rif:
+ *          type: string
+ *          description: company rif
+ *        provider:
+ *          type: object
+ *          description: provider data
+ *          properties:
+ *            email:
+ *              type: string
+ *              description: company email
+ *            address:
+ *              type: string
+ *              description: company address
+ *            name:
+ *              type: string
+ *              description: company name
+ *            phone_number:
+ *              type: string
+ *              description: company number
+ *      required:
+ *        - rif
+ *        - provider
+ *      example:
+ *        company_name: momasoft
+ *        rif: '27271032'
+ *        provider:
+ *          email: hanjo@momazo.com
+ *          address: las uwuquenas
+ *          name: hanjo mora
+ *          phone_number: '04147658833'
+ */
+
+/**
+ * @swagger
+ * /api/provider/company:
+ *  post:
+ *    summary: create company provider
+ *    tags: [providers]
+ *    requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/create company'
+ *    responses:
+ *      200:
+ *        description: company provider created ok
+ */
+router.post('/company',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createCompanySchema, 'body'), async(req, res, next) => {
   try {
@@ -111,6 +303,69 @@ router.post('/create/company',
   }
 })
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    update independent:
+ *      type: object
+ *      properties:
+ *        birthDate:
+ *          type: string
+ *          description: independent birthDate number
+ *        cedula:
+ *          type: string
+ *          description: independent cedula
+ *        provider:
+ *          type: object
+ *          description: provider data
+ *          properties:
+ *            email:
+ *              type: string
+ *              description: independent email
+ *            address:
+ *              type: string
+ *              description: independent address
+ *            name:
+ *              type: string
+ *              description: independent name
+ *            phone_number:
+ *              type: string
+ *              description: independent number
+ *      required:
+ *        - cedula
+ *        - provider
+ *      example:
+ *        birthDate: '03/02/1999'
+ *        cedula: '27271032'
+ *        provider:
+ *          email: hanjo@momazo.com
+ *          address: las uwuquenas
+ *          name: hanjo mora
+ *          phone_number: '04147658833'
+ */
+
+/**
+ * @swagger
+ * /api/provider/independent/{id}:
+ *  put:
+ *    summary: update independent provider
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/update independent'
+ *    responses:
+ *      200:
+ *        description: independent provider update ok
+ */
 router.put('/independent/:id', passport.authenticate('jwt', {session: false}),
   validatorHandler(getBySchema,'params'), validatorHandler(updateInpendentSchema,'body'), async (req, res, next)=>{
   try {
@@ -126,6 +381,68 @@ router.put('/independent/:id', passport.authenticate('jwt', {session: false}),
   }
 })
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    update company:
+ *      type: object
+ *      properties:
+ *        company_name:
+ *          type: string
+ *          description: company company_name number
+ *        rif:
+ *          type: string
+ *          description: company rif
+ *        provider:
+ *          type: object
+ *          description: provider data
+ *          properties:
+ *            email:
+ *              type: string
+ *              description: company email
+ *            address:
+ *              type: string
+ *              description: company address
+ *            name:
+ *              type: string
+ *              description: company name
+ *            phone_number:
+ *              type: string
+ *              description: company number
+ *      required:
+ *        - rif
+ *        - provider
+ *      example:
+ *        company_name: momasoft
+ *        rif: '27271032'
+ *        provider:
+ *          email: hanjo@momazo.com
+ *          address: las uwuquenas
+ *          name: hanjo mora
+ *          phone_number: '04147658833'
+ */
+/**
+ * @swagger
+ * /api/provider/company/{id}:
+ *  put:
+ *    summary: update company provider
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/update company'
+ *    responses:
+ *      200:
+ *        description: company provider update ok
+ */
 router.put('/company/:id', passport.authenticate('jwt', {session: false}),
   validatorHandler(getBySchema,'params'), validatorHandler(updateCompanySchema,'body'), async (req, res, next)=>{
   try {
@@ -141,6 +458,21 @@ router.put('/company/:id', passport.authenticate('jwt', {session: false}),
   }
 })
 
+/**
+ * @swagger
+ * /api/provider/company/{id}:
+ *  delete:
+ *    summary: get provider by id
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get providers
+ */
 router.delete('/company/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async (req, res, next)=>{
   try {
     const {id} = req.params
@@ -154,6 +486,21 @@ router.delete('/company/:id', passport.authenticate('jwt', {session: false}), va
   }
 })
 
+/**
+ * @swagger
+ * /api/provider/independent/{id}:
+ *  delete:
+ *    summary: get provider by id
+ *    tags: [providers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get providers
+ */
 router.delete('/independent/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async (req, res, next)=>{
   try {
     const {id} = req.params

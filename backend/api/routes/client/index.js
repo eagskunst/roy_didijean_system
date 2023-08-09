@@ -4,11 +4,73 @@ const ClientService = require('../../services/user/client.service')
 const adminRouteMiddleWare = require('../../middlewares')
 const boom = require("@hapi/boom");
 const { checkAuthToken } = require('../../middlewares/authHandler');
+const { getBySchema } = require('../../schemas/provider');
+const validatorHandler = require('../../middlewares/validatorHandler');
+const passport = require('passport')
 
 const router = express.Router()
 const clientService = new ClientService()
 
-router.post("/create", adminRouteMiddleWare(createClientSchema), async (req, res, next) => {
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    create client:
+ *      type: object
+ *      properties:
+ *        cellphone_number:
+ *          type: string
+ *          description: client cellphone number
+ *        address:
+ *          type: string
+ *          description: client address
+ *        cedula:
+ *          type: string
+ *          description: client cedula id
+ *        user:
+ *          type: object
+ *          description: user data
+ *          properties:
+ *            email:
+ *              type: string
+ *              description: client email
+ *            password:
+ *              type: string
+ *              description: client password
+ *            name:
+ *              type: string
+ *              description: client name
+ *      required:
+ *        - address
+ *        - cedula
+ *        - user
+ *      example:
+ *        address: las uwuquenas
+ *        cellphone_number: '02763422294'
+ *        cedula: '27271032'
+ *        user:
+ *          email: hanjo@momazo.com
+ *          password: '12345678'
+ *          name: hanjo mora
+ */
+
+/**
+ * @swagger
+ * /api/client:
+ *  post:
+ *    summary: create client
+ *    tags: [client]
+ *    requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/create client'
+ *    responses:
+ *      200:
+ *        description: client created ok
+ */
+router.post("/", adminRouteMiddleWare(createClientSchema), async (req, res, next) => {
     try {
         const body = req.body
         const newClient = await clientService.create(body)
@@ -21,10 +83,25 @@ router.post("/create", adminRouteMiddleWare(createClientSchema), async (req, res
     }
 })
 
-router.delete("/", adminRouteMiddleWare(updateClientSchema), async (req, res, next) => {
+/**
+ * @swagger
+ * /api/client/{cedula}:
+ *  delete:
+ *    summary: delete client by cedula
+ *    tags: [client]
+ *    parameters:
+ *      - in: path
+ *        name: cedula
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: delete clients
+ */
+router.delete("/:cedula", passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async (req, res, next) => {
     try {
-        const body = req.body
-        const deletedClient = await clientService.deleteClientByCedula(body.cedula)
+      const {cedula} = req.params
+        const deletedClient = await clientService.deleteClientByCedula(cedula)
         if (!deletedClient) {
             throw boom.notFound(`Client not found`);
         }
@@ -39,6 +116,66 @@ router.delete("/", adminRouteMiddleWare(updateClientSchema), async (req, res, ne
     }
 })
 
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    update client:
+ *      type: object
+ *      properties:
+ *        cellphone_number:
+ *          type: string
+ *          description: client cellphone number
+ *        address:
+ *          type: string
+ *          description: client address
+ *        cedula:
+ *          type: string
+ *          description: client cedula id
+ *        user:
+ *          type: object
+ *          description: user data
+ *          properties:
+ *            email:
+ *              type: string
+ *              description: client email
+ *            password:
+ *              type: string
+ *              description: client password
+ *            name:
+ *              type: string
+ *              description: client name
+ *      required:
+ *        - address
+ *        - cedula
+ *        - user
+ *      example:
+ *        address: las uwuquenas
+ *        cellphone_number: '02763422294'
+ *        cedula: '27271032'
+ *        user:
+ *          email: hanjo@momazo.com
+ *          password: '12345678'
+ *          name: hanjo mora
+ */
+
+/**
+ * @swagger
+ * /api/client:
+ *  patch:
+ *    summary: update client
+ *    tags: [client]
+ *    requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/update client'
+ *    responses:
+ *      200:
+ *        description: client update ok
+ */
 router.patch("/", adminRouteMiddleWare(updateClientSchema), async (req, res, next) => {
     try {
         const body = req.body
@@ -56,6 +193,17 @@ router.patch("/", adminRouteMiddleWare(updateClientSchema), async (req, res, nex
         next(error)
     }
 })
+
+/**
+ * @swagger
+ * /api/client:
+ *  get:
+ *    summary: get all clients
+ *    tags: [client]
+ *    responses:
+ *      200:
+ *        description: get clients
+ */
 router.get("/", checkAuthToken, async (req, res, next) => {
     try {
         const clients = await clientService.getAll()
@@ -65,6 +213,21 @@ router.get("/", checkAuthToken, async (req, res, next) => {
     }
 })
 
+/**
+ * @swagger
+ * /api/client/{cedula}:
+ *  get:
+ *    summary: get client by cedula
+ *    tags: [client]
+ *    parameters:
+ *      - in: path
+ *        name: cedula
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get clients
+ */
 router.get("/:cedula", checkAuthToken, async (req, res, next) => {
     try {
         const client = await clientService.findByCedula(req.params.cedula)
