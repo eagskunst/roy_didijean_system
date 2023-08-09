@@ -13,8 +13,8 @@ class ClientService extends UserService {
         try {
             transaction = t ?? await sequelize.transaction();
             const res = await super.create(data.user, transaction)
-            data.client.user_id = res.id
-            const client = await models.Client.create(data.client, { transaction })
+            data.user_id = res.id
+            const client = await models.Client.create(data, { transaction })
             transaction.commit()
             return client
         } catch (error) {

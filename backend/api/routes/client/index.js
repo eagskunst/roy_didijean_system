@@ -14,6 +14,16 @@ const clientService = new ClientService()
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+
+/**
+ * @swagger
+ * components:
  *  schemas:
  *    create client:
  *      type: object
@@ -58,6 +68,8 @@ const clientService = new ClientService()
  * @swagger
  * /api/client:
  *  post:
+ *    security:
+ *      - bearerAuth: []
  *    summary: create client
  *    tags: [client]
  *    requestBody:
@@ -87,6 +99,8 @@ router.post("/", adminRouteMiddleWare(createClientSchema), async (req, res, next
  * @swagger
  * /api/client/{cedula}:
  *  delete:
+ *    security:
+ *      - bearerAuth: []
  *    summary: delete client by cedula
  *    tags: [client]
  *    parameters:
@@ -164,6 +178,8 @@ router.delete("/:cedula", passport.authenticate('jwt', {session: false}), valida
  * @swagger
  * /api/client:
  *  patch:
+ *    security:
+ *      - bearerAuth: []
  *    summary: update client
  *    tags: [client]
  *    requestBody:
@@ -198,6 +214,8 @@ router.patch("/", adminRouteMiddleWare(updateClientSchema), async (req, res, nex
  * @swagger
  * /api/client:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get all clients
  *    tags: [client]
  *    responses:
@@ -217,6 +235,8 @@ router.get("/", checkAuthToken, async (req, res, next) => {
  * @swagger
  * /api/client/{cedula}:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get client by cedula
  *    tags: [client]
  *    parameters:

@@ -14,15 +14,26 @@ const companyService = new CompanyService()
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+/**
+ * @swagger
  * /api/provider:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get all providers
  *    tags: [providers]
  *    responses:
  *      200:
  *        description: get clients
  */
-router.get('/', async(req, res, next) => {
+router.get('/', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await providerService.find()
     res.json({
@@ -37,6 +48,8 @@ router.get('/', async(req, res, next) => {
  * @swagger
  * /api/provider/{id}:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get provider by id
  *    tags: [providers]
  *    parameters:
@@ -48,7 +61,7 @@ router.get('/', async(req, res, next) => {
  *      200:
  *        description: get providers
  */
-router.get('/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
     const data = await providerService.findOne(id)
@@ -64,13 +77,15 @@ router.get('/:id', validatorHandler(getBySchema, 'params'), async(req, res, next
  * @swagger
  * /api/provider/independent:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get all independent providers
  *    tags: [providers]
  *    responses:
  *      200:
  *        description: get independent clients
  */
-router.get('/independent', async(req, res, next) => {
+router.get('/independent', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await independentService.find()
     res.json({
@@ -86,13 +101,15 @@ router.get('/independent', async(req, res, next) => {
  * @swagger
  * /api/provider/company:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get all company providers
  *    tags: [providers]
  *    responses:
  *      200:
  *        description: get company clients
  */
-router.get('/company', async(req, res, next) => {
+router.get('/company', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await companyService.find()
     res.json({
@@ -107,6 +124,8 @@ router.get('/company', async(req, res, next) => {
  * @swagger
  * /api/provider/independent/{id}:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get independent by id
  *    tags: [providers]
  *    parameters:
@@ -118,7 +137,7 @@ router.get('/company', async(req, res, next) => {
  *      200:
  *        description: get independents
  */
-router.get('/independent/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/independent/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
     const data = await independentService.findOne(id)
@@ -134,6 +153,8 @@ router.get('/independent/:id', validatorHandler(getBySchema, 'params'), async(re
  * @swagger
  * /api/provider/company/{id}:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get company by id
  *    tags: [providers]
  *    parameters:
@@ -145,7 +166,7 @@ router.get('/independent/:id', validatorHandler(getBySchema, 'params'), async(re
  *      200:
  *        description: get companys
  */
-router.get('/company/:id', validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/company/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
     const data = await companyService.findOne(id)
@@ -203,6 +224,8 @@ router.get('/company/:id', validatorHandler(getBySchema, 'params'), async(req, r
  * @swagger
  * /api/provider/independent:
  *  post:
+ *    security:
+ *      - bearerAuth: []
  *    summary: create independent provider
  *    tags: [providers]
  *    requestBody:
@@ -276,6 +299,8 @@ router.post('/independent',
  * @swagger
  * /api/provider/company:
  *  post:
+ *    security:
+ *      - bearerAuth: []
  *    summary: create company provider
  *    tags: [providers]
  *    requestBody:
@@ -349,6 +374,8 @@ router.post('/company',
  * @swagger
  * /api/provider/independent/{id}:
  *  put:
+ *    security:
+ *      - bearerAuth: []
  *    summary: update independent provider
  *    tags: [providers]
  *    parameters:
@@ -426,6 +453,8 @@ router.put('/independent/:id', passport.authenticate('jwt', {session: false}),
  * @swagger
  * /api/provider/company/{id}:
  *  put:
+ *    security:
+ *      - bearerAuth: []
  *    summary: update company provider
  *    tags: [providers]
  *    parameters:
@@ -462,6 +491,8 @@ router.put('/company/:id', passport.authenticate('jwt', {session: false}),
  * @swagger
  * /api/provider/company/{id}:
  *  delete:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get provider by id
  *    tags: [providers]
  *    parameters:
@@ -490,6 +521,8 @@ router.delete('/company/:id', passport.authenticate('jwt', {session: false}), va
  * @swagger
  * /api/provider/independent/{id}:
  *  delete:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get provider by id
  *    tags: [providers]
  *    parameters:

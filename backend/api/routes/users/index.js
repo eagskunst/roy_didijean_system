@@ -11,6 +11,15 @@ const adminService = new AdminService()
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+/**
+ * @swagger
+ * components:
  *  schemas:
  *    create admin:
  *      type: object
@@ -46,6 +55,8 @@ const adminService = new AdminService()
  * @swagger
  * /api/admin:
  *  post:
+ *    security:
+ *      - bearerAuth: []
  *    summary: create admin
  *    tags: [admin]
  *    requestBody:
@@ -91,6 +102,8 @@ router.post("/", adminRouteMiddleWare(createAdminSchema), async (req, res, next)
  * @swagger
  * /api/admin:
  *  delete:
+ *    security:
+ *      - bearerAuth: []
  *    summary: delete admin
  *    tags: [admin]
  *    requestBody:
@@ -150,6 +163,8 @@ router.delete("/", adminRouteMiddleWare(deleteAdminSchema), async (req, res, nex
  * @swagger
  * /api/admin:
  *  patch:
+ *    security:
+ *      - bearerAuth: []
  *    summary: update admin
  *    tags: [admin]
  *    requestBody:
@@ -185,6 +200,8 @@ router.patch("/", adminRouteMiddleWare(updateAdminSchema), async (req, res, next
  * @swagger
  * /api/admin:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get all admins
  *    tags: [admin]
  *    responses:
@@ -206,6 +223,8 @@ router.get("/", checkAuthToken, async (req, res, next) => {
  * @swagger
  * /api/admin/{username}:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: get admin by username
  *    tags: [admin]
  *    parameters:
