@@ -5,8 +5,7 @@ import { Container, Typography } from '@mui/material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
-import Logo from '../components/logo';
-import Iconify from '../components/iconify';
+
 // sections
 import { LoginForm } from '../sections/auth/login';
 
