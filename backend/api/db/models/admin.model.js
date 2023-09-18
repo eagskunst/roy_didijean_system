@@ -4,10 +4,10 @@ const ADMIN_TABLE = 'admins'
 
 const AdminSchema = {
   id: {
+    type: DataTypes.INTEGER(4),
     allowNull: false,
-    autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    autoIncrement: true,
   },
   user_id: {
       allowNull: false,

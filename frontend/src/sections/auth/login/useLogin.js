@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const url = 'http://localhost:3000/api';
+const url = 'http://localhost:3001/api';
 
 export const useLogin = () => {
   const [username, setUsername] = useState('');

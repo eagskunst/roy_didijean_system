@@ -1,0 +1,31 @@
+{
+  "name": "roy_dijiean_system",
+  "description": "Application for the administration of Roy Dijiean",
+  "version": "1.0.0",
+  "main": "frontend/electron/main.js",
+  "scripts": {
+    "electron:start": "cd frontend && concurrently \"wait-on tcp:127.0.0.1:3000 && electron .\" \"yarn start\" \"cd .. && npm run back-start\"",
+    "back-dev": "nodemon backend/api/app.js",
+    "back-start": "node backend/api/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eagskunst/roy_dijiean_system.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eagskunst/roy_dijiean_system/issues"
+  },
+  "homepage": "https://github.com/eagskunst/roy_dijiean_system#readme",
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^26.2.1",
+    "concurrently": "^8.2.1",
+    "wait-on": "^7.0.1"
+  }
+}
