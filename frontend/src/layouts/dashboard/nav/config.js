@@ -17,13 +17,8 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
-    title: 'Proveedores (Independientes)',
-    path: '/dashboard/providers-independent',
-    icon: icon('ic_cart'),
-  },
-  {
-    title: 'Proveedores (Compañias)',
-    path: '/dashboard/providers-company',
+    title: 'Proveedores',
+    path: '/dashboard/providers',
     icon: icon('ic_cart'),
   },
 ];
