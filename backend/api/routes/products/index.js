@@ -5,6 +5,7 @@ const passport = require('passport');
 const ProductsService = require('../../services/products');
 const GarmentsService = require('../../services/products/garments.service');
 const { getBySchema } = require('../../schemas/provider');
+const { getByTypeSchema, createUpdateGarmentSchema } = require('../../schemas/products');
 
 const router = express.Router()
 const productService = new ProductsService()
@@ -171,7 +172,7 @@ router.get('/allproducts/garments/:id', passport.authenticate('jwt', {session: f
  *      200:
  *        description: get products garment type
  */
-router.get('/allproducts/garmentsbytype/:type', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
+router.get('/allproducts/garmentsbytype/:type', passport.authenticate('jwt', {session: false}), validatorHandler(getByTypeSchema, 'params'), async(req, res, next) => {
   try {
     const {type} = req.params
     const data = await garmentService.findByType(type)
@@ -207,7 +208,7 @@ router.get('/allproducts/garmentsbytype/:type', passport.authenticate('jwt', {se
  *          description: color
  *        type:
  *          type: string
- *          description: type
+ *          description: allow upper, lower or full
  *        product:
  *          type: object
  *          description: product data
@@ -265,6 +266,7 @@ router.get('/allproducts/garmentsbytype/:type', passport.authenticate('jwt', {se
  */
 router.post('/garment',
   passport.authenticate('jwt', {session: false}),
+  validatorHandler(createUpdateGarmentSchema,'body'),
   async(req, res, next) => {
   try {
     const body = req.body
@@ -304,6 +306,7 @@ router.post('/garment',
  */
 router.put('/garment/:id', passport.authenticate('jwt', {session: false}),
    validatorHandler(getBySchema,'params'),
+   validatorHandler(createUpdateGarmentSchema,'body'),
    async (req, res, next)=>{
   try {
     const {id} = req.params
