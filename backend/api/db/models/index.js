@@ -6,6 +6,8 @@ const { Independent, IndependentSchema } = require("./independent.model");
 const { Company, companySchema } = require("./company.model");
 const { Product, ProductSchema } = require("./products.model");
 const { Garment, GarmentSchema } = require("./garments.model");
+const { Transaction, TransactionSchema } = require("./transaction.model");
+const { Bill, BillSchema } = require("./bill.model");
 
 function setupModels(sequelize){
   User.init(UserSchema, User.config(sequelize))
@@ -16,6 +18,8 @@ function setupModels(sequelize){
   Company.init(companySchema, Company.config(sequelize))
   Product.init(ProductSchema, Product.config(sequelize))
   Garment.init(GarmentSchema, Garment.config(sequelize))
+  Transaction.init(TransactionSchema, Transaction.config(sequelize))
+  Bill.init(BillSchema, Bill.config(sequelize))
 
   User.associate(sequelize.models)
   Admin.associate(sequelize.models)
@@ -25,6 +29,7 @@ function setupModels(sequelize){
   Company.associate(sequelize.models)
   Product.associate(sequelize.models)
   Garment.associate(sequelize.models)
+  Transaction.associate(sequelize.models)
 }
 
 module.exports = setupModels

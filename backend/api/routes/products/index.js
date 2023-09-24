@@ -22,7 +22,7 @@ const garmentService = new GarmentsService()
  */
 /**
  * @swagger
- * /api/product/allproducts:
+ * /api/product/products:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -32,7 +32,7 @@ const garmentService = new GarmentsService()
  *      200:
  *        description: get products
  */
-router.get('/allproducts', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
+router.get('/products', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await productService.find()
     res.json({
@@ -54,7 +54,7 @@ router.get('/allproducts', passport.authenticate('jwt', {session: false}), async
  */
 /**
  * @swagger
- * /api/product/allproductsbyid/{id}:
+ * /api/product/productbyid/{id}:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -69,9 +69,11 @@ router.get('/allproducts', passport.authenticate('jwt', {session: false}), async
  *      200:
  *        description: get products by id
  */
-router.get('/allproductsbyid/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/productbyid/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
+    console.log(id)
+    console.log
     const data = await productService.findOne(id)
     res.json({
       data: data
@@ -92,7 +94,7 @@ router.get('/allproductsbyid/:id', passport.authenticate('jwt', {session: false}
  */
 /**
  * @swagger
- * /api/product/allproducts/garments:
+ * /api/product/products/garments:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -102,7 +104,7 @@ router.get('/allproductsbyid/:id', passport.authenticate('jwt', {session: false}
  *      200:
  *        description: get products garment list
  */
-router.get('/allproducts/garments', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
+router.get('/products/garments', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await garmentService.find()
     res.json({
@@ -124,7 +126,7 @@ router.get('/allproducts/garments', passport.authenticate('jwt', {session: false
  */
 /**
  * @swagger
- * /api/product/allproducts/garments/{id}:
+ * /api/product/products/garmentsbyid/{id}:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -139,9 +141,10 @@ router.get('/allproducts/garments', passport.authenticate('jwt', {session: false
  *      200:
  *        description: get products garment id
  */
-router.get('/allproducts/garments/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/products/garmentsbyid/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
+    console.log(id)
     const data = await garmentService.findOne(id)
     res.json({
       data: data
@@ -162,7 +165,7 @@ router.get('/allproducts/garments/:id', passport.authenticate('jwt', {session: f
  */
 /**
  * @swagger
- * /api/product/allproducts/garmentsbytype/{type}:
+ * /api/product/products/garmentsbytype/{type}:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -172,7 +175,7 @@ router.get('/allproducts/garments/:id', passport.authenticate('jwt', {session: f
  *      200:
  *        description: get products garment type
  */
-router.get('/allproducts/garmentsbytype/:type', passport.authenticate('jwt', {session: false}), validatorHandler(getByTypeSchema, 'params'), async(req, res, next) => {
+router.get('/products/garmentsbytype/:type', passport.authenticate('jwt', {session: false}), validatorHandler(getByTypeSchema, 'params'), async(req, res, next) => {
   try {
     const {type} = req.params
     const data = await garmentService.findByType(type)

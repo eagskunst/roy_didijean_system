@@ -112,7 +112,7 @@ router.post("/", adminRouteMiddleWare(createClientSchema), async (req, res, next
  *      200:
  *        description: delete clients
  */
-router.delete("/:cedula", passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async (req, res, next) => {
+router.delete("/:cedula", passport.authenticate('jwt', {session: false}), checkAuthToken, async (req, res, next) => {
     try {
       const {cedula} = req.params
         const deletedClient = await clientService.deleteClientByCedula(cedula)

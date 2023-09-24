@@ -17,9 +17,6 @@ class GarmentsService extends ProductsService {
     const garment = await models.Garment.findByPk(id, {
       include: ['product']
     });
-    // if (!garment) {
-    //   throw boom.notFound('customer not found');
-    // }
     return garment;
   }
 
@@ -45,7 +42,6 @@ class GarmentsService extends ProductsService {
     console.log(`client: ${model.id}`)
     console.log(`client: ${model.product.id}`)
     const rta = await model.update(changes)
-    // await model.Product.update(changes.product)
     return rta;
   }
 
