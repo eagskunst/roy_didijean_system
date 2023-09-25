@@ -17,6 +17,7 @@ export const useLogin = () => {
       });
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem('token', data.token);
         navigate('/dashboard', { replace: true });
       }
       throw new Error(data.message);

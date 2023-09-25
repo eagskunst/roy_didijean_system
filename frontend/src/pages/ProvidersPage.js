@@ -13,18 +13,19 @@ import {
   Container,
   Typography,
   TableContainer,
-  CircularProgress,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  TextField,
-  DialogActions,
+  CircularProgress,
   IconButton,
   Popover,
   MenuItem,
 } from '@mui/material';
+
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 // components
 import Iconify from '../components/iconify';
@@ -33,16 +34,19 @@ import Scrollbar from '../components/scrollbar';
 import { ListHead } from '../sections/ListHead';
 // mock
 import USERLIST from '../_mock/user';
-import { useClients } from '../hooks/useClients';
+
+import { useProviders } from '../hooks/useProviders';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'Identificador' },
   { id: 'name', label: 'Nombre' },
   { id: 'email', label: 'Email' },
-  { id: 'id', label: 'Cédula' },
+  { id: 'phone_number', label: 'Teléfono' },
   { id: 'address', label: 'Dirección' },
-  { id: 'cellphone_number', label: 'Teléfono' },
+
+  // { id: 'birthday', label: 'Cumpleaños ' },
   { id: '' },
 ];
 
@@ -77,7 +81,9 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ClientsPage() {
+export default function ProvidersPage() {
+  const [showForm, setShowForm] = useState(false);
+
   const [page] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -90,9 +96,7 @@ export default function ClientsPage() {
 
   const [rowsPerPage] = useState(5);
 
-  const { clients, loading, formValues, handleFormChange, addClient, deleteClient, setIsEdit } = useClients();
-
-  const [showForm, setShowForm] = useState(false);
+  const { providers, loading, formValues, handleFormChange, addProvider, deleteProvider, setIsEdit } = useProviders();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -140,7 +144,7 @@ export default function ClientsPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(clients, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(providers, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -153,104 +157,16 @@ export default function ClientsPage() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
   return (
     <>
       <Helmet>
-        <title> Cliente | Roni Didijean </title>
+        <title> Proveedor | Roni Didijean </title>
       </Helmet>
-      <Dialog open={showForm} onClose={() => setShowForm(false)}>
-        <DialogTitle>Clientes</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Ingresa los datos del cliente </DialogContentText>
-          <TextField
-            value={formValues.name}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            name="name"
-            id="name"
-            label="Nombre"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            value={formValues.password}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            name="password"
-            id="password"
-            label="Contraseña"
-            type="password"
-            fullWidth
-            variant="standard"
-          />{' '}
-          <TextField
-            value={formValues.email}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            id="email"
-            name="email"
-            label="Correo"
-            type="email"
-            fullWidth
-            variant="standard"
-          />{' '}
-          <TextField
-            value={formValues.address}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            name="address"
-            id="address"
-            label="Dirección"
-            type="text"
-            fullWidth
-            variant="standard"
-          />{' '}
-          <TextField
-            value={formValues.cellphone_number}
-            onChange={handleFormChange}
-            name="cellphone_number"
-            autoFocus
-            margin="dense"
-            id="cellphone_number"
-            label="Número de teléfono"
-            type="text"
-            fullWidth
-            variant="standard"
-          />{' '}
-          <TextField
-            value={formValues.cedula}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            name="cedula"
-            id="cedula"
-            label="Cédula"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowForm(false)}>Cancelar</Button>
-          <Button
-            onClick={() => {
-              addClient();
-              setShowForm(false);
-            }}
-          >
-            Guardar
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Clientes{' '}
+            Proveedores
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => setShowForm(true)}>
             Agregar
@@ -277,22 +193,17 @@ export default function ClientsPage() {
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                      const { id, cedula, address, cellphone_number: cellPhone, user } = row;
-
-                      const { name, email } = user;
+                      const { id, name, email, phone_number: phoneNumber, address } = row;
                       const selectedUser = selected.indexOf(name) !== -1;
 
                       return (
                         <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                          <TableCell align="left">{id}</TableCell>
                           <TableCell align="left">{name}</TableCell>
-
                           <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{cedula}</TableCell>
+                          <TableCell align="left">{phoneNumber}</TableCell>
 
                           <TableCell align="left">{address}</TableCell>
-
-                          <TableCell align="left">{cellPhone}</TableCell>
-
                           <TableCell align="left">
                             <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                               <Iconify icon={'eva:more-vertical-fill'} />
@@ -332,7 +243,7 @@ export default function ClientsPage() {
                             <MenuItem
                               sx={{ color: 'error.main' }}
                               onClick={() => {
-                                deleteClient(cedula);
+                                deleteProvider(id);
                                 handleCloseMenu();
                               }}
                             >
@@ -340,6 +251,95 @@ export default function ClientsPage() {
                               Eliminar
                             </MenuItem>
                           </Popover>
+                          <Dialog open={showForm} onClose={() => setShowForm(false)}>
+                            <DialogTitle>Proveedores</DialogTitle>
+                            <DialogContent>
+                              <DialogContentText>Ingresa los datos del proveedor </DialogContentText>
+                              <TextField
+                                value={formValues.name}
+                                onChange={handleFormChange}
+                                autoFocus
+                                margin="dense"
+                                name="name"
+                                id="name"
+                                label="Nombre"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                              />
+                              <TextField
+                                value={formValues.email}
+                                onChange={handleFormChange}
+                                autoFocus
+                                margin="dense"
+                                name="email"
+                                id="email"
+                                label="Correo Electrónico"
+                                type="email"
+                                fullWidth
+                                variant="standard"
+                              />{' '}
+                              <TextField
+                                value={formValues.address}
+                                onChange={handleFormChange}
+                                autoFocus
+                                margin="dense"
+                                id="address"
+                                name="address"
+                                label="Dirección"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                              />{' '}
+                              <TextField
+                                value={formValues.phone_number}
+                                onChange={handleFormChange}
+                                autoFocus
+                                margin="dense"
+                                name="phone_number"
+                                id="phone_number"
+                                label="Teléfono"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                              />{' '}
+                              <TextField
+                                value={formValues.cedula}
+                                onChange={handleFormChange}
+                                name="cedula"
+                                autoFocus
+                                margin="dense"
+                                id="cedula"
+                                label="Cédula"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                              />{' '}
+                              <TextField
+                                value={formValues.birthDate}
+                                onChange={handleFormChange}
+                                autoFocus
+                                margin="dense"
+                                name="birthDate"
+                                id="birthDate"
+                                label="Cumpleaños"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                              />
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={() => setShowForm(false)}>Cancelar</Button>
+                              <Button
+                                onClick={() => {
+                                  addProvider(id);
+                                  setShowForm(false);
+                                }}
+                              >
+                                Guardar
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                         </TableRow>
                       );
                     })}
@@ -389,6 +389,35 @@ export default function ClientsPage() {
           </Card>
         )}
       </Container>
+
+      {/* <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          Edit
+        </MenuItem>
+
+        <MenuItem sx={{ color: 'error.main' }}>
+          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+          Delete
+        </MenuItem>
+      </Popover> */}
     </>
   );
 }
