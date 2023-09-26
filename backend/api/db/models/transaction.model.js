@@ -1,5 +1,6 @@
 const { Model, DataTypes, Sequelize} = require('sequelize')
 const { CLIENT_TABLE } = require('./client.model')
+const { PROVIDER_TABLE } = require('./provider.model')
 
 const TRANSACTION_TABLE = "transaction"
 
@@ -11,14 +12,36 @@ const TransactionSchema = {
     type: DataTypes.INTEGER
   },
   client_id: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
         model: CLIENT_TABLE,
         key: 'id'
     },
-    onDelete: 'CASCADE'
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
+  },
+  provider_id: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+        model: PROVIDER_TABLE,
+        key: 'id'
+    },
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
+  },
+  currency: {
+    allowNull: false,
+    type: DataTypes.ENUM(['usd', 'cop', 'ves'])
+  },
+  payment_method: {
+    allowNull: false,
+    type: DataTypes.ENUM(['cash', 'card', 'transfer', 'movil'])
+  },
+  data_payment: {
+    allowNull: true,
+    type: DataTypes.STRING
   },
   created_date: {
     allowNull: false,
@@ -27,7 +50,6 @@ const TransactionSchema = {
   },
   total: {
     type: DataTypes.INTEGER,
-
   }
 }
 
@@ -36,8 +58,13 @@ class Transaction extends Model {
         this.belongsTo(models.Client, {
             as: "client",
             foreignKey: "client_id",
-            allowNull: false
+            allowNull: true
          })
+         this.belongsTo(models.Provider, {
+          as: "provider",
+          foreignKey: "provider_id",
+          allowNull: true
+        })
          this.belongsToMany(models.Product, {
           as: 'product',
           through: models.Bill,

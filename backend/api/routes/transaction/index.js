@@ -18,17 +18,17 @@ const service = new TransactionService();
  */
 /**
  * @swagger
- * /api/transaction/clienttransaction:
+ * /api/transaction/:
  *  get:
  *    security:
  *      - bearerAuth: []
- *    summary: get all client transaction
- *    tags: [sell transaction]
+ *    summary: get all transactions
+ *    tags: [transaction]
  *    responses:
  *      200:
- *        description: get all client transaction
+ *        description: get all transactions
  */
-router.get('/clienttransaction',
+router.get('/',
   passport.authenticate('jwt', {session: false}),
   async (req, res, next) => {
     try {
@@ -55,8 +55,8 @@ router.get('/clienttransaction',
  *  get:
  *    security:
  *      - bearerAuth: []
- *    summary: get client transaction by id
- *    tags: [sell transaction]
+ *    summary: get transaction by client id
+ *    tags: [transaction]
  *    parameters:
  *      - in: path
  *        name: id
@@ -64,7 +64,7 @@ router.get('/clienttransaction',
  *          type: string
  *    responses:
  *      200:
- *        description: get by transaction by client client
+ *        description: get transaction by client id
  */
 router.get('/clienttransaction/:id',
   passport.authenticate('jwt', {session: false}),
@@ -72,7 +72,47 @@ router.get('/clienttransaction/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const transaction = await service.findByClient(id);
+      const transaction = await service.findClientsById(id);
+      res.json(transaction);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+/**
+ * @swagger
+ * /api/transaction/providertransaction/{id}:
+ *  get:
+ *    security:
+ *      - bearerAuth: []
+ *    summary: get transaction by client id
+ *    tags: [transaction]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: get transaction by provider id
+ */
+router.get('/providertransaction/:id',
+  passport.authenticate('jwt', {session: false}),
+  validatorHandler(getTransactionSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const transaction = await service.findProviderById(id);
       res.json(transaction);
     } catch (error) {
       next(error);
@@ -95,8 +135,8 @@ router.get('/clienttransaction/:id',
  *  get:
  *    security:
  *      - bearerAuth: []
- *    summary: get all products garments id
- *    tags: [sell transaction]
+ *    summary: get transaction by id
+ *    tags: [transaction]
  *    parameters:
  *      - in: path
  *        name: id
@@ -104,7 +144,7 @@ router.get('/clienttransaction/:id',
  *          type: string
  *    responses:
  *      200:
- *        description: get by id transaction
+ *        description: get transaction by id
  */
 router.get(
   '/:id',
@@ -130,10 +170,40 @@ router.get(
  *        client_id:
  *          type: number
  *          description: client id
+ *        currency:
+ *          type: string
+ *          description: currency
+ *        payment_method:
+ *          type: string
+ *          description: payment_method
+ *        data_payment:
+ *          type: string
+ *          description: data_payment
+ *        products:
+ *          type: array
+ *          items:
+ *            type: object
+ *            description: provider data
+ *            properties:
+ *              product_id:
+ *                type: number
+ *                description: product id
+ *              product_quantity:
+ *                type: number
+ *                description: product quantity
  *      required:
  *        - client_id
+ *        - currency
+ *        - payment_method
+ *        - products
  *      example:
  *        client_id: 1
+ *        currency: usd
+ *        payment_method: cash
+ *        data_payment: '1231231231323'
+ *        products:
+ *          - product_id: 1
+ *            product_quantity: 2
  */
 
 /**
@@ -143,7 +213,7 @@ router.get(
  *    security:
  *      - bearerAuth: []
  *    summary: create transaction client
- *    tags: [sell transaction]
+ *    tags: [transaction]
  *    requestBody:
  *        content:
  *          application/json:
@@ -172,53 +242,73 @@ router.post(
  * @swagger
  * components:
  *  schemas:
- *    add product:
+ *    transaction provider:
  *      type: object
  *      properties:
- *        transaction_id:
+ *        provider_id:
  *          type: number
- *          description: transaction
- *        product_id:
- *          type: number
- *          description: product
- *        product_quantity:
- *          type: number
- *          description: product_quantity
+ *          description: provider id
+ *        currency:
+ *          type: string
+ *          description: currency
+ *        payment_method:
+ *          type: string
+ *          description: payment_method
+ *        data_payment:
+ *          type: string
+ *          description: data_payment
+ *        products:
+ *          type: array
+ *          items:
+ *            type: object
+ *            description: provider data
+ *            properties:
+ *              product_id:
+ *                type: number
+ *                description: product id
+ *              product_quantity:
+ *                type: number
+ *                description: product quantity
  *      required:
- *        - transaction_id
- *        - product_id
- *        - product_quantity
+ *        - provider_id
+ *        - currency
+ *        - payment_method
+ *        - products
  *      example:
- *        transaction_id: 2
- *        product_id: 4
- *        product_quantity: 5
+ *        provider_id: 1
+ *        currency: usd
+ *        payment_method: cash
+ *        data_payment: '1231231231323'
+ *        products:
+ *          - product_id: 1
+ *            product_quantity: 2
  */
 
 /**
  * @swagger
- * /api/transaction/client/add-product:
+ * /api/transaction/provider:
  *  post:
  *    security:
  *      - bearerAuth: []
- *    summary: add product
- *    tags: [sell transaction]
+ *    summary: create transaction provider
+ *    tags: [transaction]
  *    requestBody:
  *        content:
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/add product'
+ *              $ref: '#/components/schemas/transaction provider'
  *    responses:
  *      200:
- *        description: client add product ok
+ *        description: client transaction provider ok
  */
 router.post(
-  '/client/add-product',
-  validatorHandler(addProductSchema, 'body'),
+  '/provider',
+  validatorHandler(createTransactionSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newProduct = await service.addProduct(body);
+      const newProduct = await service.create(body);
       res.status(201).json(newProduct);
     } catch (error) {
       next(error);
