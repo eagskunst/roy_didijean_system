@@ -38,10 +38,10 @@ import { useClients } from '../hooks/useClients';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Identificador'},
+  { id: 'id', label: 'Identificador' },
   { id: 'name', label: 'Nombre' },
   { id: 'email', label: 'Email' },
-  { id: 'id', label: 'Cédula' },
+  { id: 'cedula', label: 'Cédula' },
   { id: 'address', label: 'Dirección' },
   { id: 'cellphone_number', label: 'Teléfono' },
   { id: '' },
@@ -91,7 +91,7 @@ export default function ClientsPage() {
 
   const [rowsPerPage] = useState(5);
 
-  const { clients, loading, formValues, handleFormChange, addClient, deleteClient, setIsEdit } = useClients();
+  const { clients, loading, formValues, handleFormChange, addClient, deleteClient, setIsEdit, isEdit } = useClients();
 
   const [showForm, setShowForm] = useState(false);
 
@@ -109,7 +109,6 @@ export default function ClientsPage() {
     }
     setSelected([]);
   };
-
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
@@ -131,7 +130,13 @@ export default function ClientsPage() {
       <Helmet>
         <title> Cliente | Roni Didijean </title>
       </Helmet>
-      <Dialog open={showForm} onClose={() => setShowForm(false)}>
+      <Dialog
+        open={showForm}
+        onClose={() => {
+          setShowForm(false);
+          setIsEdit(false);
+        }}
+      >
         <DialogTitle>Clientes</DialogTitle>
         <DialogContent>
           <DialogContentText>Ingresa los datos del cliente </DialogContentText>
@@ -147,30 +152,34 @@ export default function ClientsPage() {
             fullWidth
             variant="standard"
           />
-          <TextField
-            value={formValues.password}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            name="password"
-            id="password"
-            label="Contraseña"
-            type="password"
-            fullWidth
-            variant="standard"
-          />{' '}
-          <TextField
-            value={formValues.email}
-            onChange={handleFormChange}
-            autoFocus
-            margin="dense"
-            id="email"
-            name="email"
-            label="Correo"
-            type="email"
-            fullWidth
-            variant="standard"
-          />{' '}
+          {!isEdit && (
+            <TextField
+              value={formValues.password}
+              onChange={handleFormChange}
+              autoFocus
+              margin="dense"
+              name="password"
+              id="password"
+              label="Contraseña"
+              type="password"
+              fullWidth
+              variant="standard"
+            />
+          )}
+          {!isEdit && (
+            <TextField
+              value={formValues.email}
+              onChange={handleFormChange}
+              autoFocus
+              margin="dense"
+              id="email"
+              name="email"
+              label="Correo"
+              type="email"
+              fullWidth
+              variant="standard"
+            />
+          )}
           <TextField
             value={formValues.address}
             onChange={handleFormChange}

@@ -39,14 +39,9 @@ export const useClients = () => {
 
   const addClient = async () => {
     setLoading(true);
-    try {
-      const response = await fetch(`${url}/client`, {
-        method: !isEdit ? 'POST' : 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
+
+    const body = !isEdit
+      ? JSON.stringify({
           address: formValues.address,
           cellphone_number: formValues.cellphone_number,
           cedula: formValues.cedula,
@@ -55,24 +50,30 @@ export const useClients = () => {
             password: formValues.password,
             name: formValues.name,
           },
-        }),
+        })
+      : JSON.stringify({
+          address: formValues.address,
+          cellphone_number: formValues.cellphone_number,
+          cedula: formValues.cedula,
+          name: formValues.name,
+        });
+
+    try {
+      const response = await fetch(`${url}/client`, {
+        method: !isEdit ? 'POST' : 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body,
       });
       const dataResponse = await response.json();
       throw new Error(dataResponse.message);
     } catch (error) {
       return {};
     } finally {
-      setIsEdit(false);
-      setLoading(false);
-      setFormValues(() => ({
-        password: '',
-        cedula: '',
-        email: '',
-        address: '',
-        name: '',
-        cellphone_number: '',
-      }));
       getClients();
+      setLoading(false);
     }
   };
 
@@ -104,5 +105,5 @@ export const useClients = () => {
     getClients();
   }, []);
 
-  return { clients, loading, formValues, handleFormChange, addClient, deleteClient, setIsEdit };
+  return { clients, loading, formValues, isEdit, handleFormChange, addClient, deleteClient, setIsEdit };
 };

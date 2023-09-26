@@ -35,6 +35,7 @@ class ClientService extends UserService {
                 as: 'user'
             }
         })
+        console.log(client)
         return client
     }
 
@@ -51,7 +52,6 @@ class ClientService extends UserService {
 
     async updateClientByCedula(data) {
         const client = await this.findByCedula(data.cedula)
-        console.log(`client: ${client.user}`)
         if (!client || !client.user) {
             return client
         }
