@@ -15,7 +15,6 @@
     "plugin:react-hooks/recommended",
     "prettier",
          "plugin:react/recommended",
-        "standard",
         "plugin:react/jsx-runtime",
         "plugin:testing-library/react",
         "plugin:jest/all"

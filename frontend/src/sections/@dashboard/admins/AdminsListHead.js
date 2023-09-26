@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // @mui
-import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
+import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material'
 
 // ----------------------------------------------------------------------
 
@@ -13,8 +13,8 @@ const visuallyHidden = {
   overflow: 'hidden',
   position: 'absolute',
   whiteSpace: 'nowrap',
-  clip: 'rect(0 0 0 0)',
-};
+  clip: 'rect(0 0 0 0)'
+}
 
 AdminsListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
@@ -23,21 +23,21 @@ AdminsListHead.propTypes = {
   headLabel: PropTypes.array,
   numSelected: PropTypes.number,
   onRequestSort: PropTypes.func,
-  onSelectAllClick: PropTypes.func,
-};
+  onSelectAllClick: PropTypes.func
+}
 
-export default function AdminsListHead({
+export default function AdminsListHead ({
   order,
   orderBy,
   rowCount,
   headLabel,
   numSelected,
   onRequestSort,
-  onSelectAllClick,
+  onSelectAllClick
 }) {
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
+    onRequestSort(event, property)
+  }
 
   return (
     <TableHead>
@@ -47,5 +47,5 @@ export default function AdminsListHead({
         ))}
       </TableRow>
     </TableHead>
-  );
+  )
 }

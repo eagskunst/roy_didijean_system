@@ -1,8 +1,8 @@
-import { Helmet } from 'react-helmet-async';
-import { Link as RouterLink } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async'
+import { Link as RouterLink } from 'react-router-dom'
 // @mui
-import { styled } from '@mui/material/styles';
-import { Button, Typography, Container, Box } from '@mui/material';
+import { styled } from '@mui/material/styles'
+import { Button, Typography, Container, Box } from '@mui/material'
 
 // ----------------------------------------------------------------------
 
@@ -13,12 +13,12 @@ const StyledContent = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(12, 0),
-}));
+  padding: theme.spacing(12, 0)
+}))
 
 // ----------------------------------------------------------------------
 
-export default function Page404() {
+export default function Page404 () {
   return (
     <>
       <Helmet>
@@ -48,5 +48,5 @@ export default function Page404() {
         </StyledContent>
       </Container>
     </>
-  );
+  )
 }

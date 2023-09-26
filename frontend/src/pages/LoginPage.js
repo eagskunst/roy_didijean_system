@@ -1,21 +1,21 @@
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async'
 // @mui
-import { styled } from '@mui/material/styles';
-import { Container, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles'
+import { Container, Typography } from '@mui/material'
 // hooks
-import useResponsive from '../hooks/useResponsive';
+import useResponsive from '../hooks/useResponsive'
 // components
 
 // sections
-import { LoginForm } from '../sections/auth/login';
+import { LoginForm } from '../sections/auth/login'
 
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
-}));
+    display: 'flex'
+  }
+}))
 
 const StyledSection = styled('div')(({ theme }) => ({
   width: '100%',
@@ -24,8 +24,8 @@ const StyledSection = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
-}));
+  backgroundColor: theme.palette.background.default
+}))
 
 const StyledContent = styled('div')(({ theme }) => ({
   maxWidth: 480,
@@ -34,13 +34,13 @@ const StyledContent = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(12, 0),
-}));
+  padding: theme.spacing(12, 0)
+}))
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
-  const mdUp = useResponsive('up', 'md');
+export default function LoginPage () {
+  const mdUp = useResponsive('up', 'md')
 
   return (
     <>
@@ -68,5 +68,5 @@ export default function LoginPage() {
         </Container>
       </StyledRoot>
     </>
-  );
+  )
 }

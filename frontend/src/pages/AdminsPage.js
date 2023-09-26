@@ -1,6 +1,6 @@
-import { Helmet } from 'react-helmet-async';
-import { filter } from 'lodash';
-import { useState } from 'react';
+import { Helmet } from 'react-helmet-async'
+import { filter } from 'lodash'
+import { useState } from 'react'
 // @mui
 import {
   Card,
@@ -23,16 +23,16 @@ import {
   DialogActions,
   IconButton,
   Popover,
-  MenuItem,
-} from '@mui/material';
+  MenuItem
+} from '@mui/material'
 // components
-import Iconify from '../components/iconify';
-import Scrollbar from '../components/scrollbar';
+import Iconify from '../components/iconify'
+import Scrollbar from '../components/scrollbar'
 // sections
-import { ListHead } from '../sections/ListHead';
+import { ListHead } from '../sections/ListHead'
 // mock
-import USERLIST from '../_mock/user';
-import { useAdmins } from '../hooks/useAdmins';
+import USERLIST from '../_mock/user'
+import { useAdmins } from '../hooks/useAdmins'
 
 // ----------------------------------------------------------------------
 
@@ -41,69 +41,69 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Nombre' },
   { id: 'username', label: 'Usuario' },
   { id: 'email', label: 'Email' },
-  { id: '', label: '' },
-];
+  { id: '', label: '' }
+]
 
 // ----------------------------------------------------------------------
 
-function descendingComparator(a, b, orderBy) {
+function descendingComparator (a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
-    return -1;
+    return -1
   }
   if (b[orderBy] > a[orderBy]) {
-    return 1;
+    return 1
   }
-  return 0;
+  return 0
 }
 
-function getComparator(order, orderBy) {
+function getComparator (order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
+function applySortFilter (array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index])
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
+    const order = comparator(a[0], b[0])
+    if (order !== 0) return order
+    return a[1] - b[1]
+  })
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1)
   }
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis.map((el) => el[0])
 }
 
-export default function AdminsPage() {
-  const [page] = useState(0);
+export default function AdminsPage () {
+  const [page] = useState(0)
 
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState('asc')
 
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([])
 
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('name')
 
-  const [filterName] = useState('');
+  const [filterName] = useState('')
 
-  const [rowsPerPage] = useState(5);
+  const [rowsPerPage] = useState(5)
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+    const isAsc = orderBy === property && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(property)
+  }
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
+      const newSelecteds = USERLIST.map((n) => n.name)
+      setSelected(newSelecteds)
+      return
     }
-    setSelected([]);
-  };
+    setSelected([])
+  }
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0
 
   const {
     admins,
@@ -114,25 +114,25 @@ export default function AdminsPage() {
     updateAdmin,
     handleEditFormChange,
     editFormValues,
-    deleteAdmin,
-  } = useAdmins();
+    deleteAdmin
+  } = useAdmins()
 
-  const filteredUsers = applySortFilter(admins, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(admins, getComparator(order, orderBy), filterName)
 
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const isNotFound = !filteredUsers.length && !!filterName
 
-  const [showForm, setShowForm] = useState(false);
-  const [open, setOpen] = useState(null);
+  const [showForm, setShowForm] = useState(false)
+  const [open, setOpen] = useState(null)
 
-  const [showEditForm, setShowEditForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false)
 
   const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
-  };
+    setOpen(event.currentTarget)
+  }
 
   const handleCloseMenu = () => {
-    setOpen(null);
-  };
+    setOpen(null)
+  }
   return (
     <>
       <Helmet>
@@ -195,8 +195,8 @@ export default function AdminsPage() {
           <Button onClick={() => setShowForm(false)}>Cancelar</Button>
           <Button
             onClick={() => {
-              addAdmin();
-              setShowForm(false);
+              addAdmin()
+              setShowForm(false)
             }}
           >
             Guardar
@@ -248,8 +248,8 @@ export default function AdminsPage() {
           <Button onClick={() => setShowEditForm(false)}>Cancelar</Button>
           <Button
             onClick={() => {
-              updateAdmin();
-              setShowEditForm(false);
+              updateAdmin()
+              setShowEditForm(false)
             }}
           >
             Guardar
@@ -265,9 +265,11 @@ export default function AdminsPage() {
             Agregar
           </Button>
         </Stack>
-        {loading ? (
+        {loading
+          ? (
           <CircularProgress />
-        ) : (
+            )
+          : (
           <Card>
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
@@ -283,10 +285,10 @@ export default function AdminsPage() {
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                      const { id, user, username } = row;
+                      const { id, user, username } = row
 
-                      const { name, email } = user;
-                      const selectedUser = selected.indexOf(name) !== -1;
+                      const { name, email } = user
+                      const selectedUser = selected.indexOf(name) !== -1
 
                       return (
                         <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
@@ -316,15 +318,15 @@ export default function AdminsPage() {
                                 '& .MuiMenuItem-root': {
                                   px: 1,
                                   typography: 'body2',
-                                  borderRadius: 0.75,
-                                },
-                              },
+                                  borderRadius: 0.75
+                                }
+                              }
                             }}
                           >
                             <MenuItem
                               onClick={() => {
-                                setShowEditForm(true);
-                                handleCloseMenu();
+                                setShowEditForm(true)
+                                handleCloseMenu()
                               }}
                             >
                               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
@@ -334,8 +336,8 @@ export default function AdminsPage() {
                             <MenuItem
                               sx={{ color: 'error.main' }}
                               onClick={() => {
-                                deleteAdmin(username);
-                                handleCloseMenu();
+                                deleteAdmin(username)
+                                handleCloseMenu()
                               }}
                             >
                               <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
@@ -343,7 +345,7 @@ export default function AdminsPage() {
                             </MenuItem>
                           </Popover>
                         </TableRow>
-                      );
+                      )
                     })}
                     {emptyRows > 0 && (
                       <TableRow style={{ height: 53 * emptyRows }}>
@@ -358,7 +360,7 @@ export default function AdminsPage() {
                         <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                           <Paper
                             sx={{
-                              textAlign: 'center',
+                              textAlign: 'center'
                             }}
                           >
                             <Typography variant="h6" paragraph>
@@ -379,8 +381,8 @@ export default function AdminsPage() {
               </TableContainer>
             </Scrollbar>
           </Card>
-        )}
+            )}
       </Container>
     </>
-  );
+  )
 }

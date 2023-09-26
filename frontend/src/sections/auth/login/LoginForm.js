@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useState } from 'react'
 // @mui
-import { Stack, IconButton, InputAdornment, TextField } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Stack, IconButton, InputAdornment, TextField } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../components/iconify'
 
-import { useLogin } from './useLogin';
+import { useLogin } from './useLogin'
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function LoginForm () {
+  const [showPassword, setShowPassword] = useState(false)
 
-  const { username, setUsername, password, setPassword, signIn } = useLogin();
+  const { username, setUsername, password, setPassword, signIn } = useLogin()
 
   return (
     <>
@@ -21,7 +21,7 @@ export default function LoginForm() {
           label="Nombre de usuario"
           value={username}
           onChange={(e) => {
-            setUsername(e.target.value);
+            setUsername(e.target.value)
           }}
         />
         <TextField
@@ -35,11 +35,11 @@ export default function LoginForm() {
                   <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
-            ),
+            )
           }}
           value={password}
           onChange={(e) => {
-            setPassword(e.target.value);
+            setPassword(e.target.value)
           }}
         />
       </Stack>
@@ -48,5 +48,5 @@ export default function LoginForm() {
         Iniciar Sesión
       </LoadingButton>
     </>
-  );
+  )
 }

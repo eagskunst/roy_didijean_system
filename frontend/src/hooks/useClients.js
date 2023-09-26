@@ -74,6 +74,7 @@ export const useClients = () => {
     } finally {
       getClients();
       setLoading(false);
+      setIsEdit(false);
     }
   };
 
@@ -105,5 +106,5 @@ export const useClients = () => {
     getClients();
   }, []);
 
-  return { clients, loading, formValues, isEdit, handleFormChange, addClient, deleteClient, setIsEdit };
+  return { clients, loading, formValues, isEdit,handleFormChange, addClient, deleteClient, setIsEdit };
 };

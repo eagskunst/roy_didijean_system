@@ -1,17 +1,17 @@
 // @mui
-import { alpha, styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles'
+import { Box } from '@mui/material'
 
 // ----------------------------------------------------------------------
 
 export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
-  const isLight = theme.palette.mode === 'light';
+  const isLight = theme.palette.mode === 'light'
 
-  const filledVariant = ownerState.variant === 'filled';
+  const filledVariant = ownerState.variant === 'filled'
 
-  const outlinedVariant = ownerState.variant === 'outlined';
+  const outlinedVariant = ownerState.variant === 'outlined'
 
-  const softVariant = ownerState.variant === 'soft';
+  const softVariant = ownerState.variant === 'soft'
 
   const defaultStyle = {
     ...(ownerState.color === 'default' && {
@@ -19,36 +19,36 @@ export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
       ...(outlinedVariant && {
         backgroundColor: 'transparent',
         color: theme.palette.text.primary,
-        border: `1px solid ${alpha(theme.palette.grey[500], 0.32)}`,
+        border: `1px solid ${alpha(theme.palette.grey[500], 0.32)}`
       }),
       // SOFT
       ...(softVariant && {
         color: isLight ? theme.palette.text.primary : theme.palette.common.white,
-        backgroundColor: alpha(theme.palette.grey[500], 0.16),
-      }),
-    }),
-  };
+        backgroundColor: alpha(theme.palette.grey[500], 0.16)
+      })
+    })
+  }
 
   const colorStyle = {
     ...(ownerState.color !== 'default' && {
       // FILLED
       ...(filledVariant && {
         color: theme.palette[ownerState.color].contrastText,
-        backgroundColor: theme.palette[ownerState.color].main,
+        backgroundColor: theme.palette[ownerState.color].main
       }),
       // OUTLINED
       ...(outlinedVariant && {
         backgroundColor: 'transparent',
         color: theme.palette[ownerState.color].main,
-        border: `1px solid ${theme.palette[ownerState.color].main}`,
+        border: `1px solid ${theme.palette[ownerState.color].main}`
       }),
       // SOFT
       ...(softVariant && {
         color: theme.palette[ownerState.color][isLight ? 'dark' : 'light'],
-        backgroundColor: alpha(theme.palette[ownerState.color].main, 0.16),
-      }),
-    }),
-  };
+        backgroundColor: alpha(theme.palette[ownerState.color].main, 0.16)
+      })
+    })
+  }
 
   return {
     height: 24,
@@ -68,6 +68,6 @@ export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
     backgroundColor: theme.palette.grey[300],
     fontWeight: theme.typography.fontWeightBold,
     ...colorStyle,
-    ...defaultStyle,
-  };
-});
+    ...defaultStyle
+  }
+})

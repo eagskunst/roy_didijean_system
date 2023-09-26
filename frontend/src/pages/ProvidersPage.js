@@ -18,6 +18,9 @@ import {
   IconButton,
   Popover,
   MenuItem,
+  Switch,
+  FormGroup,
+  FormControlLabel,
 } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
@@ -37,20 +40,18 @@ import USERLIST from '../_mock/user';
 
 import { useProviders } from '../hooks/useProviders';
 
-// ----------------------------------------------------------------------
-
 const TABLE_HEAD = [
   { id: 'id', label: 'Identificador' },
   { id: 'name', label: 'Nombre' },
   { id: 'email', label: 'Email' },
   { id: 'phone_number', label: 'Teléfono' },
   { id: 'address', label: 'Dirección' },
-
-  // { id: 'birthday', label: 'Cumpleaños ' },
+  { id: 'cedula', label: 'Cédula' },
+  { id: 'birthday', label: 'Cumpleaños ' },
+  { id: 'company_name', label: 'Nombre de la compañia' },
+  { id: 'rif', label: 'Rif' },
   { id: '' },
 ];
-
-// ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -96,7 +97,18 @@ export default function ProvidersPage() {
 
   const [rowsPerPage] = useState(5);
 
-  const { providers, loading, formValues, handleFormChange, addProvider, deleteProvider, setIsEdit } = useProviders();
+  const {
+    providers,
+    loading,
+    formValues,
+    handleFormChange,
+    addProvider,
+    deleteProvider,
+    setIsEdit,
+    isIndependetProvider,
+    handleSwitchChange,
+    setIdToEdit,
+  } = useProviders();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -112,35 +124,6 @@ export default function ProvidersPage() {
     }
     setSelected([]);
   };
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
-
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setPage(0);
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  // };
-
-  // const handleFilterByName = (event) => {
-  //   setPage(0);
-  //   setFilterName(event.target.value);
-  // };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
@@ -163,11 +146,150 @@ export default function ProvidersPage() {
       <Helmet>
         <title> Proveedor | Roni Didijean </title>
       </Helmet>
+      <Dialog
+        open={Boolean(showForm)}
+        onClose={() => {
+          setIsEdit(false);
+
+          setShowForm(false);
+        }}
+      >
+        <DialogTitle>Proveedores</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Ingresa los datos del proveedor </DialogContentText>
+          <TextField
+            value={formValues.name}
+            onChange={handleFormChange}
+            autoFocus
+            margin="dense"
+            name="name"
+            id="name"
+            label="Nombre"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            value={formValues.email}
+            onChange={handleFormChange}
+            autoFocus
+            margin="dense"
+            name="email"
+            id="email"
+            label="Correo Electrónico"
+            type="email"
+            fullWidth
+            variant="standard"
+          />{' '}
+          <TextField
+            value={formValues.address}
+            onChange={handleFormChange}
+            autoFocus
+            margin="dense"
+            id="address"
+            name="address"
+            label="Dirección"
+            type="text"
+            fullWidth
+            variant="standard"
+          />{' '}
+          <TextField
+            value={formValues.phone_number}
+            onChange={handleFormChange}
+            autoFocus
+            margin="dense"
+            name="phone_number"
+            id="phone_number"
+            label="Teléfono"
+            type="text"
+            fullWidth
+            variant="standard"
+          />{' '}
+          {isIndependetProvider ? (
+            <>
+              <TextField
+                value={formValues.cedula}
+                onChange={handleFormChange}
+                name="cedula"
+                autoFocus
+                margin="dense"
+                id="cedula"
+                label="Cédula"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                value={formValues.birthDate}
+                onChange={handleFormChange}
+                autoFocus
+                margin="dense"
+                name="birthDate"
+                id="birthDate"
+                label="Cumpleaños"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
+            </>
+          ) : (
+            <>
+              <TextField
+                value={formValues.company_name}
+                onChange={handleFormChange}
+                name="company_name"
+                autoFocus
+                margin="dense"
+                id="company_name"
+                label="Nombre de la compañia"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                value={formValues.rif}
+                onChange={handleFormChange}
+                autoFocus
+                margin="dense"
+                name="rif"
+                id="rif"
+                label="Rif"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowForm(false)}>Cancelar</Button>
+          <Button
+            onClick={() => {
+              addProvider();
+              setShowForm(false);
+            }}
+          >
+            Guardar
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Proveedores
           </Typography>
+          <FormGroup>
+            <FormControlLabel
+              label="Proveedor Independiente"
+              control={
+                <Switch
+                  checked={isIndependetProvider}
+                  onChange={handleSwitchChange}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              }
+            />
+          </FormGroup>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => setShowForm(true)}>
             Agregar
           </Button>
@@ -177,8 +299,6 @@ export default function ProvidersPage() {
           <CircularProgress />
         ) : (
           <Card>
-            {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
-
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>
@@ -193,7 +313,9 @@ export default function ProvidersPage() {
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                      const { id, name, email, phone_number: phoneNumber, address } = row;
+                      const { id, cedula, birthDate, company_name: companyName, rif } = row;
+
+                      const { name, email, phone_number: phoneNumber, address } = row.provider;
                       const selectedUser = selected.indexOf(name) !== -1;
 
                       return (
@@ -202,8 +324,12 @@ export default function ProvidersPage() {
                           <TableCell align="left">{name}</TableCell>
                           <TableCell align="left">{email}</TableCell>
                           <TableCell align="left">{phoneNumber}</TableCell>
-
                           <TableCell align="left">{address}</TableCell>
+                          <TableCell align="left">{cedula}</TableCell>
+                          <TableCell align="left">{birthDate}</TableCell>
+                          <TableCell align="left">{companyName}</TableCell>
+                          <TableCell align="left">{rif}</TableCell>
+
                           <TableCell align="left">
                             <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                               <Iconify icon={'eva:more-vertical-fill'} />
@@ -229,9 +355,10 @@ export default function ProvidersPage() {
                           >
                             <MenuItem
                               onClick={() => {
-                                setShowForm(true);
-                                setIsEdit(true);
                                 handleCloseMenu();
+                                setShowForm(true);
+                                setIdToEdit(id);
+                                setIsEdit(true);
                               }}
                             >
                               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
@@ -241,103 +368,15 @@ export default function ProvidersPage() {
                             <MenuItem
                               sx={{ color: 'error.main' }}
                               onClick={() => {
-                                deleteProvider(id);
+                                console.log(id);
                                 handleCloseMenu();
+                                deleteProvider(id);
                               }}
                             >
                               <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
                               Eliminar
                             </MenuItem>
                           </Popover>
-                          <Dialog open={showForm} onClose={() => setShowForm(false)}>
-                            <DialogTitle>Proveedores</DialogTitle>
-                            <DialogContent>
-                              <DialogContentText>Ingresa los datos del proveedor </DialogContentText>
-                              <TextField
-                                value={formValues.name}
-                                onChange={handleFormChange}
-                                autoFocus
-                                margin="dense"
-                                name="name"
-                                id="name"
-                                label="Nombre"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                              />
-                              <TextField
-                                value={formValues.email}
-                                onChange={handleFormChange}
-                                autoFocus
-                                margin="dense"
-                                name="email"
-                                id="email"
-                                label="Correo Electrónico"
-                                type="email"
-                                fullWidth
-                                variant="standard"
-                              />{' '}
-                              <TextField
-                                value={formValues.address}
-                                onChange={handleFormChange}
-                                autoFocus
-                                margin="dense"
-                                id="address"
-                                name="address"
-                                label="Dirección"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                              />{' '}
-                              <TextField
-                                value={formValues.phone_number}
-                                onChange={handleFormChange}
-                                autoFocus
-                                margin="dense"
-                                name="phone_number"
-                                id="phone_number"
-                                label="Teléfono"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                              />{' '}
-                              <TextField
-                                value={formValues.cedula}
-                                onChange={handleFormChange}
-                                name="cedula"
-                                autoFocus
-                                margin="dense"
-                                id="cedula"
-                                label="Cédula"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                              />{' '}
-                              <TextField
-                                value={formValues.birthDate}
-                                onChange={handleFormChange}
-                                autoFocus
-                                margin="dense"
-                                name="birthDate"
-                                id="birthDate"
-                                label="Cumpleaños"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                              />
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={() => setShowForm(false)}>Cancelar</Button>
-                              <Button
-                                onClick={() => {
-                                  addProvider(id);
-                                  setShowForm(false);
-                                }}
-                              >
-                                Guardar
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
                         </TableRow>
                       );
                     })}
@@ -374,48 +413,9 @@ export default function ProvidersPage() {
                 </Table>
               </TableContainer>
             </Scrollbar>
-
-            {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
           </Card>
         )}
       </Container>
-
-      {/* <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover> */}
     </>
   );
 }

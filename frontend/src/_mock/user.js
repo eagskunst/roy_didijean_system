@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker'
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ const users = [...Array(24)].map(() => ({
   // birthdate: faker.date.past(),
   // rif: faker.datatype.uuid(),
   // avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
-  name: faker.name.fullName(),
+  name: faker.name.fullName()
   // company: faker.company.name(),
   // isVerified: faker.datatype.boolean(),
   // status: sample(['active', 'banned']),
@@ -27,6 +27,6 @@ const users = [...Array(24)].map(() => ({
   //   'Front End Developer',
   //   'Full Stack Developer',
   // ]),
-}));
+}))
 
-export default users;
+export default users

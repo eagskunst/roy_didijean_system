@@ -1,19 +1,19 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // @mui
-import { alpha } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { alpha } from '@mui/material/styles'
+import { Box } from '@mui/material'
 //
-import Iconify from '../iconify';
+import Iconify from '../iconify'
 
 // ----------------------------------------------------------------------
 
 Icon.propTypes = {
   sx: PropTypes.object,
   checked: PropTypes.bool,
-  whiteColor: PropTypes.bool,
-};
+  whiteColor: PropTypes.bool
+}
 
-export default function Icon({ checked, whiteColor, sx, ...other }) {
+export default function Icon ({ checked, whiteColor, sx, ...other }) {
   const shadow = (
     <Box
       sx={{
@@ -22,10 +22,10 @@ export default function Icon({ checked, whiteColor, sx, ...other }) {
         opacity: 0.48,
         borderRadius: '50%',
         position: 'absolute',
-        boxShadow: '4px 4px 8px 0 currentColor',
+        boxShadow: '4px 4px 8px 0 currentColor'
       }}
     />
-  );
+  )
 
   const icon = (
     <Iconify
@@ -36,12 +36,12 @@ export default function Icon({ checked, whiteColor, sx, ...other }) {
           opacity: 1,
           color: 'common.white',
           ...(whiteColor && {
-            color: 'common.black',
-          }),
-        }),
+            color: 'common.black'
+          })
+        })
       }}
     />
-  );
+  )
 
   return (
     <Box
@@ -56,16 +56,16 @@ export default function Icon({ checked, whiteColor, sx, ...other }) {
         bgcolor: 'currentColor',
         transition: (theme) =>
           theme.transitions.create('all', {
-            duration: theme.transitions.duration.shortest,
+            duration: theme.transitions.duration.shortest
           }),
         ...(whiteColor && {
           border: (theme) => `solid 1px ${theme.palette.divider}`,
-          boxShadow: (theme) => `4px 4px 8px 0 ${alpha(theme.palette.grey[500], 0.24)}`,
+          boxShadow: (theme) => `4px 4px 8px 0 ${alpha(theme.palette.grey[500], 0.24)}`
         }),
         ...(checked && {
-          transform: 'scale(1.4)',
+          transform: 'scale(1.4)'
         }),
-        ...sx,
+        ...sx
       }}
       {...other}
     >
@@ -73,5 +73,5 @@ export default function Icon({ checked, whiteColor, sx, ...other }) {
 
       {icon}
     </Box>
-  );
+  )
 }
