@@ -38,6 +38,7 @@ import { useClients } from '../hooks/useClients';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'Identificador'},
   { id: 'name', label: 'Nombre' },
   { id: 'email', label: 'Email' },
   { id: 'id', label: 'Cédula' },
@@ -109,34 +110,6 @@ export default function ClientsPage() {
     setSelected([]);
   };
 
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
-
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setPage(0);
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  // };
-
-  // const handleFilterByName = (event) => {
-  //   setPage(0);
-  //   setFilterName(event.target.value);
-  // };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
@@ -261,8 +234,6 @@ export default function ClientsPage() {
           <CircularProgress />
         ) : (
           <Card>
-            {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
-
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>
@@ -284,6 +255,8 @@ export default function ClientsPage() {
 
                       return (
                         <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                          <TableCell align="left">{id}</TableCell>
+
                           <TableCell align="left">{name}</TableCell>
 
                           <TableCell align="left">{email}</TableCell>
@@ -316,16 +289,14 @@ export default function ClientsPage() {
                               },
                             }}
                           >
-                            <MenuItem>
-                              <Iconify
-                                icon={'eva:edit-fill'}
-                                sx={{ mr: 2 }}
-                                onClick={() => {
-                                  setShowForm(true);
-                                  setIsEdit(true);
-                                  handleCloseMenu();
-                                }}
-                              />
+                            <MenuItem
+                              onClick={() => {
+                                setShowForm(true);
+                                setIsEdit(true);
+                                handleCloseMenu();
+                              }}
+                            >
+                              <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                               Editar
                             </MenuItem>
 
@@ -376,16 +347,6 @@ export default function ClientsPage() {
                 </Table>
               </TableContainer>
             </Scrollbar>
-
-            {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
           </Card>
         )}
       </Container>

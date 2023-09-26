@@ -227,16 +227,14 @@ export default function ProvidersPage() {
                               },
                             }}
                           >
-                            <MenuItem>
-                              <Iconify
-                                icon={'eva:edit-fill'}
-                                sx={{ mr: 2 }}
-                                onClick={() => {
-                                  setShowForm(true);
-                                  setIsEdit(true);
-                                  handleCloseMenu();
-                                }}
-                              />
+                            <MenuItem
+                              onClick={() => {
+                                setShowForm(true);
+                                setIsEdit(true);
+                                handleCloseMenu();
+                              }}
+                            >
+                              <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                               Editar
                             </MenuItem>
 

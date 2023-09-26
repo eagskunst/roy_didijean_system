@@ -65,6 +65,13 @@ export const useAdmins = () => {
     } finally {
       getAdmins();
       setLoading(false);
+      setFormValues(() => ({
+        password: '',
+        email: '',
+        address: '',
+        name: '',
+        username: '',
+      }));
     }
   };
 
@@ -100,6 +107,13 @@ export const useAdmins = () => {
     } finally {
       getAdmins();
       setLoading(false);
+      setEditFormValues(() => ({
+        password: '',
+        email: '',
+        address: '',
+        name: '',
+        username: '',
+      }));
     }
   };
 
@@ -132,5 +146,15 @@ export const useAdmins = () => {
     getAdmins();
   }, []);
 
-  return { admins, loading, formValues, editFormValues, handleEditFormChange, handleFormChange, addAdmin, updateAdmin, deleteAdmin };
+  return {
+    admins,
+    loading,
+    formValues,
+    editFormValues,
+    handleEditFormChange,
+    handleFormChange,
+    addAdmin,
+    updateAdmin,
+    deleteAdmin,
+  };
 };

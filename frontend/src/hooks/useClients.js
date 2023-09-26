@@ -39,61 +39,40 @@ export const useClients = () => {
 
   const addClient = async () => {
     setLoading(true);
-    if (!isEdit) {
-      try {
-        const response = await fetch(`${url}/client`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+    try {
+      const response = await fetch(`${url}/client`, {
+        method: !isEdit ? 'POST' : 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          address: formValues.address,
+          cellphone_number: formValues.cellphone_number,
+          cedula: formValues.cedula,
+          user: {
+            email: formValues.email,
+            password: formValues.password,
+            name: formValues.name,
           },
-          body: JSON.stringify({
-            address: formValues.address,
-            cellphone_number: formValues.cellphone_number,
-            cedula: formValues.cedula,
-            user: {
-              email: formValues.email,
-              password: formValues.password,
-              name: formValues.name,
-            },
-          }),
-        });
-        const dataResponse = await response.json();
-        throw new Error(dataResponse.message);
-      } catch (error) {
-        return {};
-      } finally {
-        getClients();
-        setLoading(false);
-      }
-    } else {
-      try {
-        const response = await fetch(`${url}/client`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({
-            address: formValues.address,
-            cellphone_number: formValues.cellphone_number,
-            cedula: formValues.cedula,
-            user: {
-              email: formValues.email,
-              password: formValues.password,
-              name: formValues.name,
-            },
-          }),
-        });
-        const dataResponse = await response.json();
-        throw new Error(dataResponse.message);
-      } catch (error) {
-        return {};
-      } finally {
-        setIsEdit(false);
-        getClients();
-        setLoading(false);
-      }
+        }),
+      });
+      const dataResponse = await response.json();
+      throw new Error(dataResponse.message);
+    } catch (error) {
+      return {};
+    } finally {
+      setIsEdit(false);
+      setLoading(false);
+      setFormValues(() => ({
+        password: '',
+        cedula: '',
+        email: '',
+        address: '',
+        name: '',
+        cellphone_number: '',
+      }));
+      getClients();
     }
   };
 

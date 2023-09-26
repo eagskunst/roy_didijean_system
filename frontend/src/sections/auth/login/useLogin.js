@@ -16,8 +16,11 @@ export const useLogin = () => {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
+      console.log('🚀 ~ file: useLogin.js:19 ~ signIn ~ data:', data);
+
       if (response.ok) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify({ id: data.admin.id, ...data.admin.user }));
         navigate('/dashboard', { replace: true });
       }
       throw new Error(data.message);
