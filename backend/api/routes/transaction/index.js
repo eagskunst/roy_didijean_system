@@ -72,7 +72,7 @@ router.get('/clienttransaction/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const transaction = await service.findByClient(id);
+      const transaction = await service.findClientsById(id);
       res.json(transaction);
     } catch (error) {
       next(error);
@@ -112,7 +112,7 @@ router.get('/providertransaction/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const transaction = await service.findByProvider(id);
+      const transaction = await service.findProviderById(id);
       res.json(transaction);
     } catch (error) {
       next(error);

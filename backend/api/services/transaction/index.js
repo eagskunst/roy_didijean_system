@@ -40,7 +40,6 @@ class TransactionService {
       for(let i = 0; i < data.products.length; i++ ){
         const availableAmount =  await this.productService.findOne(data.products[i].product_id)
         availableAmount.quantity_in_stock = availableAmount.quantity_in_stock - data.products[i].product_quantity
-        console.log('data product  ',data.products[i])
         await models.Bill.create({
           transaction_id: newTransaction.id,
           product_id: data.products[i].product_id,
@@ -69,30 +68,20 @@ class TransactionService {
 
       for(let i = 0; i < data.products.length; i++ ){
         const availableAmount =  await this.productService.findOne(data.products[i].product_id)
+        availableAmount.quantity_in_stock = availableAmount.quantity_in_stock + data.products[i].product_quantity
         console.log('data product  ',data.products[i])
         await models.Bill.create({
           transaction_id: newTransaction.id,
           product_id: data.products[i].product_id,
           product_quantity: data.products[i].product_quantity
         });
-        await this.productService.update(availableAmount.id, {quantity_in_stock: data.products[i].product_quantity})
+        await this.productService.update(availableAmount.id, {quantity_in_stock: availableAmount.quantity_in_stock})
       }
       return newTransaction;
     }
   }
 
-  async addProduct(data) {
-    const availableAmount =  await this.productService.findOne(data.product_id)
-    if (data.product_quantity > availableAmount.quantity_in_stock){
-      throw boom.notAcceptable('quantity unavailable')
-    }
-    availableAmount.quantity_in_stock = availableAmount.quantity_in_stock - data.product_quantity
-    const newProduct = await models.Bill.create(data);
-    await this.productService.update(availableAmount.id, {quantity_in_stock: availableAmount.quantity_in_stock})
-    return newProduct;
-  }
-
-  async findByClient(clientId) {
+  async findClientsById(clientId) {
     const orders = await models.Transaction.findAll({
       where: {
         '$client.id$': clientId
@@ -108,7 +97,7 @@ class TransactionService {
     return orders;
   }
 
-  async findByProvider(providerId) {
+  async findProviderById(providerId) {
     const orders = await models.Transaction.findAll({
       where: {
         '$provider.id$': providerId
@@ -116,19 +105,6 @@ class TransactionService {
       include: [
         {
           association: 'provider'
-        },
-        'product'
-      ]
-    });
-    return orders;
-  }
-
-  async findClients() {
-    const orders = await models.Transaction.findAll({
-      include: [
-        {
-          association: 'client',
-          include: ['user']
         },
         'product'
       ]
