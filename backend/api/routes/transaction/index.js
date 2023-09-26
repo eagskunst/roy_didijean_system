@@ -26,7 +26,7 @@ const service = new TransactionService();
  *    tags: [sell transaction]
  *    responses:
  *      200:
- *        description: get by client transaction
+ *        description: get all client transaction
  */
 router.get('/clienttransaction',
   passport.authenticate('jwt', {session: false}),
@@ -55,7 +55,7 @@ router.get('/clienttransaction',
  *  get:
  *    security:
  *      - bearerAuth: []
- *    summary: get all products garments id
+ *    summary: get client transaction by id
  *    tags: [sell transaction]
  *    parameters:
  *      - in: path
@@ -64,7 +64,7 @@ router.get('/clienttransaction',
  *          type: string
  *    responses:
  *      200:
- *        description: get by client transaction
+ *        description: get by transaction by client client
  */
 router.get('/clienttransaction/:id',
   passport.authenticate('jwt', {session: false}),
