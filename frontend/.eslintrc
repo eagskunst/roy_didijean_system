@@ -4,20 +4,11 @@
     "browser": true,
     "es2021": true
   },
-      "settings": {
-        "react": {
-            "version": "detect"
-        }
-    },
   "extends": [
     "airbnb",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
-    "prettier",
-         "plugin:react/recommended",
-        "plugin:react/jsx-runtime",
-        "plugin:testing-library/react",
-        "plugin:jest/all"
+    "prettier"
   ],
   "plugins": [
     "react",
@@ -26,7 +17,6 @@
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
-            "sourceType": "module",
     "ecmaVersion": 8,
     "requireConfigFile": false,
     "ecmaFeatures": {
@@ -34,7 +24,6 @@
       "impliedStrict": true
     }
   },
-
   "rules": {
     "no-new": 0,
     "no-alert": 0,
