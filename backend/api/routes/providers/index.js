@@ -46,7 +46,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), async(req, res, 
 
 /**
  * @swagger
- * /api/provider/{id}:
+ * /api/provider/allbyid/{id}:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -61,7 +61,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), async(req, res, 
  *      200:
  *        description: get providers
  */
-router.get('/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/allbyid/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
     const data = await providerService.findOne(id)
@@ -75,7 +75,7 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), validatorHand
 
 /**
  * @swagger
- * /api/provider/independent:
+ * /api/provider/allindependent:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -83,9 +83,9 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), validatorHand
  *    tags: [providers]
  *    responses:
  *      200:
- *        description: get independent clients
+ *        description: get independent providers
  */
-router.get('/independent', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
+router.get('/allindependent', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await independentService.find()
     res.json({
@@ -99,7 +99,7 @@ router.get('/independent', passport.authenticate('jwt', {session: false}), async
 
 /**
  * @swagger
- * /api/provider/company:
+ * /api/provider/allcompany:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -107,9 +107,9 @@ router.get('/independent', passport.authenticate('jwt', {session: false}), async
  *    tags: [providers]
  *    responses:
  *      200:
- *        description: get company clients
+ *        description: get company providers
  */
-router.get('/company', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
+router.get('/allcompany', passport.authenticate('jwt', {session: false}), async(req, res, next) => {
   try {
     const data = await companyService.find()
     res.json({
@@ -122,7 +122,7 @@ router.get('/company', passport.authenticate('jwt', {session: false}), async(req
 
 /**
  * @swagger
- * /api/provider/independent/{id}:
+ * /api/provider/independentbyid/{id}:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -137,7 +137,7 @@ router.get('/company', passport.authenticate('jwt', {session: false}), async(req
  *      200:
  *        description: get independents
  */
-router.get('/independent/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/independentbyid/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
     const data = await independentService.findOne(id)
@@ -151,7 +151,7 @@ router.get('/independent/:id', passport.authenticate('jwt', {session: false}), v
 
 /**
  * @swagger
- * /api/provider/company/{id}:
+ * /api/provider/companybyid/{id}:
  *  get:
  *    security:
  *      - bearerAuth: []
@@ -166,7 +166,7 @@ router.get('/independent/:id', passport.authenticate('jwt', {session: false}), v
  *      200:
  *        description: get companys
  */
-router.get('/company/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
+router.get('/companybyid/:id', passport.authenticate('jwt', {session: false}), validatorHandler(getBySchema, 'params'), async(req, res, next) => {
   try {
     const {id} = req.params
     const data = await companyService.findOne(id)

@@ -47,6 +47,10 @@ class Client extends Model {
             foreignKey: "user_id",
             allowNull: false
          })
+         this.hasMany(models.Transaction, {
+          as: 'transaction',
+          foreignKey: 'client_id'
+        })
     }
 
     static config(sequelize) {

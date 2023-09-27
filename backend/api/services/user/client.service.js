@@ -35,7 +35,14 @@ class ClientService extends UserService {
                 as: 'user'
             }
         })
+        console.log(client)
         return client
+    }
+
+    async findOne(id) {
+      return await models.Client.findByPk(id, {
+        include: ['user']
+      });;
     }
 
     async deleteClientByCedula(cedula) {
@@ -51,7 +58,6 @@ class ClientService extends UserService {
 
     async updateClientByCedula(data) {
         const client = await this.findByCedula(data.cedula)
-        console.log(`client: ${client.user}`)
         if (!client || !client.user) {
             return client
         }

@@ -43,6 +43,10 @@ class Provider extends Model {
       foreignKey: 'provider_id',
       allowNull: true
     })
+    this.hasMany(models.Transaction, {
+      as: 'transaction',
+      foreignKey: 'provider_id'
+    })
   }
   static config(sequelize){
     return {

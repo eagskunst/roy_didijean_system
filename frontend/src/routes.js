@@ -7,8 +7,7 @@ import ClientsPage from './pages/ClientsPage';
 import LoginPage from './pages/LoginPage';
 // import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/AdminsPage';
-import ProvidersIndependentPage from './pages/ProvidersIndependentPage';
-import ProvidersCompanyPage from './pages/ProvidersCompanyPage';
+import ProvidersPage from './pages/ProvidersPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -20,8 +19,8 @@ export default function Router() {
         { element: <Navigate to="/dashboard/admins" />, index: true },
         { path: 'admins', element: <DashboardAppPage /> },
         { path: 'clients', element: <ClientsPage /> },
-        { path: 'providers-independent', element: <ProvidersIndependentPage /> },
-        { path: 'providers-company', element: <ProvidersCompanyPage /> },
+        { path: 'providers', element: <ProvidersPage /> },
+        // { path: 'providers-company', element: <ProvidersCompanyPage /> },
       ],
     },
     {
