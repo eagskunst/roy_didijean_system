@@ -6,19 +6,25 @@ export const useProviders = () => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formValues, setFormValues] = useState({
-    birthDate: '',
-    cedula: '',
     email: '',
     address: '',
     name: '',
     phone_number: '',
+    birthDate: '',
+    cedula: '',
+    company_name: '',
+    rif: '',
   });
 
+  const [isIndependetProvider, setIndependetProvider] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [idToEdit, setIdToEdit] = useState(0);
+
+  const providerType = isIndependetProvider ? 'independent' : 'company';
 
   const getProviders = async () => {
     try {
-      const response = await fetch(`${url}/provider`, {
+      const response = await fetch(`${url}/provider${isIndependetProvider ? '/allindependent' : '/allcompany'}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -37,69 +43,45 @@ export const useProviders = () => {
     }
   };
 
-  const addProvider = async (id = 0) => {
+  const addProvider = async () => {
     setLoading(true);
-    if (!isEdit) {
-      try {
-        const response = await fetch(`${url}/provider/independent`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({
+
+    const body = JSON.stringify({
+      provider: {
+        email: formValues.email,
+        address: formValues.address,
+        name: formValues.name,
+        phone_number: formValues.phone_number,
+      },
+      ...(isIndependetProvider
+        ? {
             birthDate: formValues.birthDate,
             cedula: formValues.cedula,
-            provider: {
-              email: formValues.email,
-              address: formValues.address,
-              name: formValues.name,
-              phone_number: formValues.phone_number,
-            },
+          }
+        : {
+            company_name: formValues.company_name,
+            rif: formValues.rif,
           }),
-        });
-        const dataResponse = await response.json();
-        if (response.ok) {
-          console.log(dataResponse);
-        }
-        throw new Error(dataResponse.message);
-      } catch (error) {
-        return {};
-      } finally {
-        getProviders();
-        setLoading(false);
-      }
-    } else {
-      try {
-        const response = await fetch(`${url}/provider/independent/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({
-            birthDate: formValues.birthDate,
-            cedula: formValues.cedula,
-            provider: {
-              email: formValues.email,
-              address: formValues.address,
-              name: formValues.name,
-              phone_number: formValues.phone_number,
-            },
-          }),
-        });
-        const dataResponse = await response.json();
-        if (response.ok) {
-          console.log(dataResponse);
-        }
-        throw new Error(dataResponse.message);
-      } catch (error) {
-        return {};
-      } finally {
-        setIsEdit(false);
-        getProviders();
-        setLoading(false);
-      }
+    });
+
+    try {
+      const response = await fetch(`${url}/provider/${providerType}${isEdit ? `/${idToEdit}` : ''}`, {
+        method: !isEdit ? 'POST' : 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body,
+      });
+      const dataResponse = await response.json();
+      throw new Error(dataResponse.message);
+    } catch (error) {
+      return {};
+    } finally {
+      getProviders();
+      setLoading(false);
+      setIsEdit(false);
+      setIdToEdit(0);
     }
   };
 
@@ -107,10 +89,14 @@ export const useProviders = () => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
+  const handleSwitchChange = (e) => {
+    setIndependetProvider(e.target.checked);
+  };
+
   const deleteProvider = async (id) => {
     setLoading(true);
     try {
-      const response = await fetch(`${url}/provider/independent/${id}`, {
+      const response = await fetch(`${url}/provider/${providerType}${`/${id}`}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -118,20 +104,34 @@ export const useProviders = () => {
         },
       });
       const dataResponse = await response.json();
-      if (response.ok) {
-        console.log(dataResponse);
-      }
       throw new Error(dataResponse.message);
     } catch (error) {
       return {};
     } finally {
       getProviders();
       setLoading(false);
+      setIsEdit(false);
+      setIdToEdit(0);
     }
   };
+
   useEffect(() => {
     getProviders();
-  }, []);
+  }, [isIndependetProvider]);
 
-  return { providers, loading, formValues, handleFormChange, addProvider, deleteProvider, setIsEdit };
+  return {
+    providers,
+    loading,
+    formValues,
+    isIndependetProvider,
+    isEdit,
+    idToEdit,
+    handleFormChange,
+    addProvider,
+    deleteProvider,
+    setIsEdit,
+    setIndependetProvider,
+    handleSwitchChange,
+    setIdToEdit,
+  };
 };

@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useState } from 'react'
 // @mui
-import { styled } from '@mui/material/styles';
-import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material';
+import { styled } from '@mui/material/styles'
+import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material'
 // utils
-import { bgBlur } from '../../../utils/cssStyles';
+import { bgBlur } from '../../../utils/cssStyles'
 // component
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../components/iconify'
 
 // ----------------------------------------------------------------------
 
-const HEADER_MOBILE = 64;
-const HEADER_DESKTOP = 92;
+const HEADER_MOBILE = 64
+const HEADER_DESKTOP = 92
 
 const StyledSearchbar = styled('div')(({ theme }) => ({
   ...bgBlur({ color: theme.palette.background.default }),
@@ -26,22 +26,22 @@ const StyledSearchbar = styled('div')(({ theme }) => ({
   boxShadow: theme.customShadows.z8,
   [theme.breakpoints.up('md')]: {
     height: HEADER_DESKTOP,
-    padding: theme.spacing(0, 5),
-  },
-}));
+    padding: theme.spacing(0, 5)
+  }
+}))
 
 // ----------------------------------------------------------------------
 
-export default function Searchbar() {
-  const [open, setOpen] = useState(false);
+export default function Searchbar () {
+  const [open, setOpen] = useState(false)
 
   const handleOpen = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
@@ -73,5 +73,5 @@ export default function Searchbar() {
         </Slide>
       </div>
     </ClickAwayListener>
-  );
+  )
 }

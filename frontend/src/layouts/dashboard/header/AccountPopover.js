@@ -1,13 +1,11 @@
-import { useState } from 'react';
+import { useState } from 'react'
 // @mui
-import { alpha } from '@mui/material/styles';
-import { Avatar, IconButton } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { alpha } from '@mui/material/styles'
+import { Avatar, IconButton } from '@mui/material'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 
-
-
-export default function AccountPopover() {
-  const [open] = useState(null);
+export default function AccountPopover () {
+  const [open] = useState(null)
 
   // const handleOpen = (event) => {
   //   setOpen(event.currentTarget);
@@ -30,9 +28,9 @@ export default function AccountPopover() {
               height: '100%',
               borderRadius: '50%',
               position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
+              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8)
+            }
+          })
         }}
       >
         <Avatar>
@@ -85,5 +83,5 @@ export default function AccountPopover() {
         </MenuItem>
       </Popover> */}
     </>
-  );
+  )
 }

@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
-const url = 'http://localhost:3000/api';
+const url = 'http://localhost:3000/api'
 
 export const useAdmins = () => {
-  const [admins, setAdmins] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [admins, setAdmins] = useState([])
+  const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState({
     password: '',
     email: '',
     address: '',
     name: '',
-    username: '',
-  });
+    username: ''
+  })
 
   const [editFormValues, setEditFormValues] = useState({
     newUsername: '',
     name: '',
-    username: '',
-  });
+    username: ''
+  })
 
   const getAdmins = async () => {
     try {
@@ -25,56 +25,63 @@ export const useAdmins = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const dataResponse = await response.json();
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      const dataResponse = await response.json()
       if (response.ok) {
-        setAdmins(() => dataResponse.admins);
+        setAdmins(() => dataResponse.admins)
       }
-      throw new Error(dataResponse.message);
+      throw new Error(dataResponse.message)
     } catch (error) {
-      return {};
+      return {}
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const addAdmin = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       const response = await fetch(`${url}/admin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
           username: formValues.username,
           user: {
             email: formValues.email,
             password: formValues.password,
-            name: formValues.name,
-          },
-        }),
-      });
-      const dataResponse = await response.json();
-      throw new Error(dataResponse.message);
+            name: formValues.name
+          }
+        })
+      })
+      const dataResponse = await response.json()
+      throw new Error(dataResponse.message)
     } catch (error) {
-      return {};
+      return {}
     } finally {
-      getAdmins();
-      setLoading(false);
+      getAdmins()
+      setLoading(false)
+      setFormValues(() => ({
+        password: '',
+        email: '',
+        address: '',
+        name: '',
+        username: ''
+      }))
     }
-  };
+  }
 
   const handleFormChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  };
+    setFormValues({ ...formValues, [e.target.name]: e.target.value })
+  }
 
   const handleEditFormChange = (e) => {
-    setEditFormValues({ ...editFormValues, [e.target.name]: e.target.value });
-  };
+    setEditFormValues({ ...editFormValues, [e.target.name]: e.target.value })
+  }
 
   const updateAdmin = async () => {
     try {
@@ -82,55 +89,72 @@ export const useAdmins = () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
           username: editFormValues.username,
           newUsername: editFormValues.newUsername,
-          name: editFormValues.name,
-        }),
-      });
-      const dataResponse = await response.json();
+          name: editFormValues.name
+        })
+      })
+      const dataResponse = await response.json()
       if (response.ok) {
-        return dataResponse;
+        return dataResponse
       }
-      throw new Error(dataResponse.message);
+      throw new Error(dataResponse.message)
     } catch (error) {
-      return {};
+      return {}
     } finally {
-      getAdmins();
-      setLoading(false);
+      getAdmins()
+      setLoading(false)
+      setEditFormValues(() => ({
+        password: '',
+        email: '',
+        address: '',
+        name: '',
+        username: ''
+      }))
     }
-  };
+  }
 
   const deleteAdmin = async (username) => {
-    setLoading(true);
+    setLoading(true)
     try {
       const response = await fetch(`${url}/admin`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          username,
-        }),
-      });
-      const dataResponse = await response.json();
+          username
+        })
+      })
+      const dataResponse = await response.json()
       if (response.ok) {
-        return dataResponse;
+        return dataResponse
       }
-      throw new Error(dataResponse.message);
+      throw new Error(dataResponse.message)
     } catch (error) {
-      return {};
+      return {}
     } finally {
-      getAdmins();
-      setLoading(false);
+      getAdmins()
+      setLoading(false)
     }
-  };
+  }
   useEffect(() => {
-    getAdmins();
-  }, []);
+    getAdmins()
+  }, [])
 
-  return { admins, loading, formValues, editFormValues, handleEditFormChange, handleFormChange, addAdmin, updateAdmin, deleteAdmin };
-};
+  return {
+    admins,
+    loading,
+    formValues,
+    editFormValues,
+    handleEditFormChange,
+    handleFormChange,
+    addAdmin,
+    updateAdmin,
+    deleteAdmin
+  }
+}

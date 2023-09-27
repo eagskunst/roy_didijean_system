@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Card, Link, Typography, Stack } from '@mui/material'
+import { styled } from '@mui/material/styles'
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { fCurrency } from '../../../utils/formatNumber'
 // components
-import Label from '../../../components/label';
-import { ColorPreview } from '../../../components/color-utils';
+import Label from '../../../components/label'
+import { ColorPreview } from '../../../components/color-utils'
 
 // ----------------------------------------------------------------------
 
@@ -15,17 +15,17 @@ const StyledProductImg = styled('img')({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute',
-});
+  position: 'absolute'
+})
 
 // ----------------------------------------------------------------------
 
 ShopProductCard.propTypes = {
-  product: PropTypes.object,
-};
+  product: PropTypes.object
+}
 
-export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+export default function ShopProductCard ({ product }) {
+  const { name, cover, price, colors, status, priceSale } = product
 
   return (
     <Card>
@@ -39,7 +39,7 @@ export default function ShopProductCard({ product }) {
               top: 16,
               right: 16,
               position: 'absolute',
-              textTransform: 'uppercase',
+              textTransform: 'uppercase'
             }}
           >
             {status}
@@ -63,7 +63,7 @@ export default function ShopProductCard({ product }) {
               variant="body1"
               sx={{
                 color: 'text.disabled',
-                textDecoration: 'line-through',
+                textDecoration: 'line-through'
               }}
             >
               {priceSale && fCurrency(priceSale)}
@@ -74,5 +74,5 @@ export default function ShopProductCard({ product }) {
         </Stack>
       </Stack>
     </Card>
-  );
+  )
 }

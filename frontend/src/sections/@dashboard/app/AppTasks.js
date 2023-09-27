@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from 'prop-types'
+import { useState } from 'react'
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form'
 // @mui
 import {
   Card,
@@ -12,25 +12,25 @@ import {
   MenuItem,
   IconButton,
   CardHeader,
-  FormControlLabel,
-} from '@mui/material';
+  FormControlLabel
+} from '@mui/material'
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../components/iconify'
 
 // ----------------------------------------------------------------------
 
 AppTasks.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
-  list: PropTypes.array.isRequired,
-};
+  list: PropTypes.array.isRequired
+}
 
-export default function AppTasks({ title, subheader, list, ...other }) {
+export default function AppTasks ({ title, subheader, list, ...other }) {
   const { control } = useForm({
     defaultValues: {
-      taskCompleted: ['2'],
-    },
-  });
+      taskCompleted: ['2']
+    }
+  })
 
   return (
     <Card {...other}>
@@ -40,7 +40,7 @@ export default function AppTasks({ title, subheader, list, ...other }) {
         control={control}
         render={({ field }) => {
           const onSelected = (task) =>
-            field.value.includes(task) ? field.value.filter((value) => value !== task) : [...field.value, task];
+            field.value.includes(task) ? field.value.filter((value) => value !== task) : [...field.value, task]
 
           return (
             <>
@@ -53,11 +53,11 @@ export default function AppTasks({ title, subheader, list, ...other }) {
                 />
               ))}
             </>
-          );
+          )
         }}
       />
     </Card>
-  );
+  )
 }
 
 // ----------------------------------------------------------------------
@@ -67,40 +67,40 @@ TaskItem.propTypes = {
   onChange: PropTypes.func,
   task: PropTypes.shape({
     id: PropTypes.string,
-    label: PropTypes.string,
-  }),
-};
+    label: PropTypes.string
+  })
+}
 
-function TaskItem({ task, checked, onChange }) {
-  const [open, setOpen] = useState(null);
+function TaskItem ({ task, checked, onChange }) {
+  const [open, setOpen] = useState(null)
 
   const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
-  };
+    setOpen(event.currentTarget)
+  }
 
   const handleCloseMenu = () => {
-    setOpen(null);
-  };
+    setOpen(null)
+  }
 
   const handleMarkComplete = () => {
-    handleCloseMenu();
-    console.log('MARK COMPLETE', task.id);
-  };
+    handleCloseMenu()
+    console.log('MARK COMPLETE', task.id)
+  }
 
   const handleShare = () => {
-    handleCloseMenu();
-    console.log('SHARE', task.id);
-  };
+    handleCloseMenu()
+    console.log('SHARE', task.id)
+  }
 
   const handleEdit = () => {
-    handleCloseMenu();
-    console.log('EDIT', task.id);
-  };
+    handleCloseMenu()
+    console.log('EDIT', task.id)
+  }
 
   const handleDelete = () => {
-    handleCloseMenu();
-    console.log('DELETE', task.id);
-  };
+    handleCloseMenu()
+    console.log('DELETE', task.id)
+  }
 
   return (
     <Stack
@@ -110,8 +110,8 @@ function TaskItem({ task, checked, onChange }) {
         py: 0.75,
         ...(checked && {
           color: 'text.disabled',
-          textDecoration: 'line-through',
-        }),
+          textDecoration: 'line-through'
+        })
       }}
     >
       <FormControlLabel
@@ -136,9 +136,9 @@ function TaskItem({ task, checked, onChange }) {
             '& .MuiMenuItem-root': {
               px: 1,
               typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
+              borderRadius: 0.75
+            }
+          }
         }}
       >
         <MenuItem onClick={handleMarkComplete}>
@@ -164,5 +164,5 @@ function TaskItem({ task, checked, onChange }) {
         </MenuItem>
       </Popover>
     </Stack>
-  );
+  )
 }
