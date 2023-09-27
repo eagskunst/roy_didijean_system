@@ -1,12 +1,8 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material'
-import { styled } from '@mui/material/styles'
-// utils
-import { fCurrency } from '../../../utils/formatNumber'
-// components
-import Label from '../../../components/label'
-import { ColorPreview } from '../../../components/color-utils'
+import { Box, Card, Typography, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { faker } from '@faker-js/faker';
 
 // ----------------------------------------------------------------------
 
@@ -15,64 +11,56 @@ const StyledProductImg = styled('img')({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute'
-})
-
-// ----------------------------------------------------------------------
+  position: 'absolute',
+});
 
 ShopProductCard.propTypes = {
-  product: PropTypes.object
-}
+  product: PropTypes.object,
+};
 
-export default function ShopProductCard ({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product
-
+export default function ShopProductCard({ product }) {
+  const {
+    name,
+    price,
+    quantity_in_stock: quaintityInStock,
+    buy_cost: buyCost,
+    sell_cost: sellCost,
+    img_url: imgUrl,
+  } = product;
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
-          <Label
-            variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
-            sx={{
-              zIndex: 9,
-              top: 16,
-              right: 16,
-              position: 'absolute',
-              textTransform: 'uppercase'
-            }}
-          >
-            {status}
-          </Label>
-        )}
-        <StyledProductImg alt={name} src={cover} />
+        <StyledProductImg alt={name} src={imgUrl || faker.image.cats()} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover">
-          <Typography variant="subtitle2" noWrap>
-            {name}
-          </Typography>
-        </Link>
+        <Typography variant="subtitle2" noWrap>
+          {name}
+        </Typography>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
+        <Stack direction="column" alignItems="center" justifyContent="start">
           <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through'
-              }}
-            >
-              {priceSale && fCurrency(priceSale)}
+            <Typography component="span" variant="body1">
+              Precio ${price}
             </Typography>
-            &nbsp;
-            {fCurrency(price)}
+          </Typography>
+          <Typography variant="subtitle1">
+            <Typography component="span" variant="body1">
+              Cantidad Disponible {quaintityInStock}
+            </Typography>
+          </Typography>
+          <Typography variant="subtitle1">
+            <Typography component="span" variant="body1">
+              Costo de Compra ${buyCost}
+            </Typography>
+          </Typography>
+          <Typography variant="subtitle1">
+            <Typography component="span" variant="body1">
+              Costo de Venta ${sellCost}
+            </Typography>
           </Typography>
         </Stack>
       </Stack>
     </Card>
-  )
+  );
 }

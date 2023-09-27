@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 // import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/AdminsPage'
 import ProvidersPage from './pages/ProvidersPage'
+import ProductsPage from './pages/ProductsPage'
 // ----------------------------------------------------------------------
 
 export default function Router () {
@@ -19,14 +20,15 @@ export default function Router () {
         { element: <Navigate to="/dashboard/admins" />, index: true },
         { path: 'admins', element: <DashboardAppPage /> },
         { path: 'clients', element: <ClientsPage /> },
-        { path: 'providers', element: <ProvidersPage /> }
+        { path: 'providers', element: <ProvidersPage /> },
+        { path: 'products', element: <ProductsPage /> },
         // { path: 'providers-company', element: <ProvidersCompanyPage /> },
-      ]
+      ],
     },
     {
       path: '*',
-      element: <LoginPage />
-    }
+      element: <LoginPage />,
+    },
     // {
     //   element: <SimpleLayout />,
     //   children: [
@@ -39,7 +41,7 @@ export default function Router () {
     //   path: '*',
     //   element: <Navigate to="/404" replace />,
     // },
-  ])
+  ]);
 
   return routes
 }
