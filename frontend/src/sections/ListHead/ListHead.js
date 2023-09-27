@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // @mui
-import { TableRow, TableCell, TableHead } from '@mui/material';
+import { TableRow, TableCell, TableHead } from '@mui/material'
 
 // ----------------------------------------------------------------------
 
 AdminsListHead.propTypes = {
-  headLabel: PropTypes.array,
-};
+  headLabel: PropTypes.array
+}
 
-export default function AdminsListHead({ headLabel }) {
+export default function AdminsListHead ({ headLabel }) {
   return (
     <TableHead>
       <TableRow>
@@ -17,5 +17,5 @@ export default function AdminsListHead({ headLabel }) {
         ))}
       </TableRow>
     </TableHead>
-  );
+  )
 }

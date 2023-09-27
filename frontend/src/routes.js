@@ -1,16 +1,16 @@
-import { Navigate, useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom'
 // layouts
-import DashboardLayout from './layouts/dashboard';
+import DashboardLayout from './layouts/dashboard'
 // import SimpleLayout from './layouts/simple';
 //
-import ClientsPage from './pages/ClientsPage';
-import LoginPage from './pages/LoginPage';
+import ClientsPage from './pages/ClientsPage'
+import LoginPage from './pages/LoginPage'
 // import Page404 from './pages/Page404';
-import DashboardAppPage from './pages/AdminsPage';
-import ProvidersPage from './pages/ProvidersPage';
+import DashboardAppPage from './pages/AdminsPage'
+import ProvidersPage from './pages/ProvidersPage'
 // ----------------------------------------------------------------------
 
-export default function Router() {
+export default function Router () {
   const routes = useRoutes([
     {
       path: '/dashboard',
@@ -19,14 +19,14 @@ export default function Router() {
         { element: <Navigate to="/dashboard/admins" />, index: true },
         { path: 'admins', element: <DashboardAppPage /> },
         { path: 'clients', element: <ClientsPage /> },
-        { path: 'providers', element: <ProvidersPage /> },
+        { path: 'providers', element: <ProvidersPage /> }
         // { path: 'providers-company', element: <ProvidersCompanyPage /> },
-      ],
+      ]
     },
     {
       path: '*',
-      element: <LoginPage />,
-    },
+      element: <LoginPage />
+    }
     // {
     //   element: <SimpleLayout />,
     //   children: [
@@ -39,7 +39,7 @@ export default function Router() {
     //   path: '*',
     //   element: <Navigate to="/404" replace />,
     // },
-  ]);
+  ])
 
-  return routes;
+  return routes
 }

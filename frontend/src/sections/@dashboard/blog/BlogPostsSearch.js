@@ -1,24 +1,24 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 // @mui
-import { styled } from '@mui/material/styles';
-import { Autocomplete, InputAdornment, Popper, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles'
+import { Autocomplete, InputAdornment, Popper, TextField } from '@mui/material'
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../components/iconify'
 
 // ----------------------------------------------------------------------
 
 const StyledPopper = styled((props) => <Popper placement="bottom-start" {...props} />)({
-  width: '280px !important',
-});
+  width: '280px !important'
+})
 
 // ----------------------------------------------------------------------
 
 BlogPostsSearch.propTypes = {
-  posts: PropTypes.array.isRequired,
-};
+  posts: PropTypes.array.isRequired
+}
 
-export default function BlogPostsSearch({ posts }) {
+export default function BlogPostsSearch ({ posts }) {
   return (
     <Autocomplete
       sx={{ width: 280 }}
@@ -38,10 +38,10 @@ export default function BlogPostsSearch({ posts }) {
               <InputAdornment position="start">
                 <Iconify icon={'eva:search-fill'} sx={{ ml: 1, width: 20, height: 20, color: 'text.disabled' }} />
               </InputAdornment>
-            ),
+            )
           }}
         />
       )}
     />
-  );
+  )
 }

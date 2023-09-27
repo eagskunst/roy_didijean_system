@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from 'react'
 // @mui
-import { alpha } from '@mui/material/styles';
-import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
+import { alpha } from '@mui/material/styles'
+import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material'
 
 // ----------------------------------------------------------------------
 
@@ -9,32 +9,32 @@ const LANGS = [
   {
     value: 'en',
     label: 'English',
-    icon: '/assets/icons/ic_flag_en.svg',
+    icon: '/assets/icons/ic_flag_en.svg'
   },
   {
     value: 'de',
     label: 'German',
-    icon: '/assets/icons/ic_flag_de.svg',
+    icon: '/assets/icons/ic_flag_de.svg'
   },
   {
     value: 'fr',
     label: 'French',
-    icon: '/assets/icons/ic_flag_fr.svg',
-  },
-];
+    icon: '/assets/icons/ic_flag_fr.svg'
+  }
+]
 
 // ----------------------------------------------------------------------
 
-export default function LanguagePopover() {
-  const [open, setOpen] = useState(null);
+export default function LanguagePopover () {
+  const [open, setOpen] = useState(null)
 
   const handleOpen = (event) => {
-    setOpen(event.currentTarget);
-  };
+    setOpen(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setOpen(null);
-  };
+    setOpen(null)
+  }
 
   return (
     <>
@@ -45,8 +45,8 @@ export default function LanguagePopover() {
           width: 44,
           height: 44,
           ...(open && {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity),
-          }),
+            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity)
+          })
         }}
       >
         <img src={LANGS[0].icon} alt={LANGS[0].label} />
@@ -67,9 +67,9 @@ export default function LanguagePopover() {
             '& .MuiMenuItem-root': {
               px: 1,
               typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
+              borderRadius: 0.75
+            }
+          }
         }}
       >
         <Stack spacing={0.75}>
@@ -83,5 +83,5 @@ export default function LanguagePopover() {
         </Stack>
       </Popover>
     </>
-  );
+  )
 }
