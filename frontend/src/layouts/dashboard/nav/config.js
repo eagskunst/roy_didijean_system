@@ -9,18 +9,23 @@ const navConfig = [
   {
     title: 'Administradores',
     path: '/dashboard/admins',
-    icon: icon('ic_user')
+    icon: icon('ic_user'),
   },
   {
     title: 'Clientes',
     path: '/dashboard/clients',
-    icon: icon('ic_user')
+    icon: icon('ic_user'),
   },
   {
     title: 'Proveedores',
     path: '/dashboard/providers',
-    icon: icon('ic_cart')
-  }
-]
+    icon: icon('ic_cart'),
+  },
+  {
+    title: 'Productos',
+    path: '/dashboard/products',
+    icon: icon('ic_cart'),
+  },
+];
 
 export default navConfig
