@@ -11,7 +11,7 @@
 5. Start the API with `npm run dev` command.
 ## Verify the API
 ```
-curl --location 'http://localhost:3000/api/auth/login' \
+curl --location 'http://localhost:3001/api/auth/login' \
 --header 'Content-Type: application/json' \
 --data '{
     "username": "tony.stark",

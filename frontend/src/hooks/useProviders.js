@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const url = 'http://localhost:3000/api';
+const url = 'http://localhost:3001/api';
 
 export const useProviders = () => {
   const [providers, setProviders] = useState([]);
