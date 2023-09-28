@@ -29,7 +29,7 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Products | Minimal UI </title>
+        <title> Producto | Roni Dididjean </title>
       </Helmet>
       <Dialog
         open={showForm}
@@ -39,7 +39,7 @@ export default function ProductsPage() {
       >
         <DialogTitle>Productos</DialogTitle>
         <DialogContent>
-          <DialogContentText>Ingresa los datos del cliente </DialogContentText>
+          <DialogContentText>Ingresa los datos del producto </DialogContentText>
           <TextField
             value={formValues.name}
             onChange={handleFormChange}
