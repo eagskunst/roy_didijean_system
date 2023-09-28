@@ -6,7 +6,7 @@ export const useProviders = () => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formValues, setFormValues] = useState({
-    email: '',
+    client_id: '',
     address: '',
     name: '',
     phone_number: '',
@@ -117,6 +117,7 @@ export const useProviders = () => {
 
   useEffect(() => {
     getProviders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIndependetProvider]);
 
   return {
