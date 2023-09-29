@@ -16,7 +16,6 @@ import {
   CircularProgress,
   Button,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogContentText,
   TextField,
@@ -27,7 +26,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
-  Chip,
+  Box,
 } from '@mui/material';
 
 // components
@@ -38,9 +37,6 @@ import { ListHead } from '../sections/ListHead';
 // mock
 import USERLIST from '../_mock/user';
 import { useTransactions } from '../hooks/useTransactions';
-import { useProducts } from '../hooks/useProducts';
-import { useProviders } from '../hooks/useProviders';
-import { useClients } from '../hooks/useClients';
 
 // ----------------------------------------------------------------------
 
@@ -97,12 +93,19 @@ export default function TransactionsPage() {
 
   const [rowsPerPage] = useState(5);
 
-  const { transactions, loading, isClientTransaction, handleSwitchChange, formValues, handleFormChange } =
-    useTransactions();
+  const {
+    transactions,
+    loading,
+    isClientTransaction,
+    handleSwitchChange,
+    formValues,
+    handleFormChange,
+    productToAdd,
+    addProductToTransaction,
+    handleProductFormChange,
+    addTransaction,
+  } = useTransactions();
 
-  const { loading: isLoadingProducts } = useProducts();
-  const { providers, loading: isLoadingProviders } = useProviders();
-  const { clients, loading: isLoadingClients } = useClients();
   const [showForm, setShowForm] = useState(false);
 
   const handleRequestSort = (event, property) => {
@@ -147,77 +150,145 @@ export default function TransactionsPage() {
           setShowForm(false);
         }}
       >
-        <DialogTitle>Transacciones</DialogTitle>
-        {isLoadingClients || isLoadingProducts || isLoadingProviders ? (
-          <CircularProgress />
-        ) : (
-          <>
-            <DialogContent>
-              <DialogContentText>Ingresa los datos de la transacción </DialogContentText>
-              <FormGroup>
-                <FormControlLabel
-                  label="Cliente"
-                  control={
-                    <Switch
-                      checked={isClientTransaction}
-                      onChange={handleSwitchChange}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                  }
-                />
-              </FormGroup>
-              {isClientTransaction && clients.map((client, index) => <Chip key={index} label={client.user.name} />)}
-              {!isClientTransaction &&
-                providers.map((provider, index) => <Chip key={index} label={provider.provider.name} />)}
-              <TextField
-                value={formValues.currency}
-                onChange={handleFormChange}
-                autoFocus
-                margin="dense"
-                name="currency"
-                id="currency"
-                label="Divisa"
-                type="text"
-                fullWidth
-                variant="standard"
+        <>
+          <DialogContent>
+            <DialogContentText>Ingresa los datos de la transacción </DialogContentText>
+            <FormGroup>
+              <FormControlLabel
+                label="Transacción de Cliente"
+                control={
+                  <Switch
+                    checked={isClientTransaction}
+                    onChange={handleSwitchChange}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                }
               />
-              <TextField
-                value={formValues.paymentMethod}
-                onChange={handleFormChange}
-                autoFocus
-                margin="dense"
-                id="paymentMethod"
-                name="paymentMethod"
-                label="Método de pago"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-              <TextField
-                value={formValues.dataPayment}
-                onChange={handleFormChange}
-                autoFocus
-                margin="dense"
-                name="dataPayment"
-                id="dataPayment"
-                label="Número de Referencia"
-                type="text"
-                fullWidth
-                variant="standard"
-              />{' '}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowForm(false)}>Cancelar</Button>
+            </FormGroup>
+            <TextField
+              value={isClientTransaction ? formValues.clientId : formValues.providerId}
+              onChange={handleFormChange}
+              autoFocus
+              margin="dense"
+              name={isClientTransaction ? 'clientId' : 'providerId'}
+              id={isClientTransaction ? 'clientId' : 'providerId'}
+              label={isClientTransaction ? 'Identificador Del Cliente' : 'Identificador Del Proovedor'}
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              value={formValues.currency}
+              onChange={handleFormChange}
+              autoFocus
+              margin="dense"
+              name="currency"
+              id="currency"
+              label="Divisa"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              value={formValues.paymentMethod}
+              onChange={handleFormChange}
+              autoFocus
+              margin="dense"
+              id="paymentMethod"
+              name="paymentMethod"
+              label="Método de pago"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              value={formValues.dataPayment}
+              onChange={handleFormChange}
+              autoFocus
+              margin="dense"
+              name="dataPayment"
+              id="dataPayment"
+              label="Número de Referencia"
+              type="text"
+              fullWidth
+              variant="standard"
+            />{' '}
+            <TextField
+              value={productToAdd.product_id}
+              onChange={handleProductFormChange}
+              autoFocus
+              margin="dense"
+              name="product_id"
+              id="product_id"
+              label="Identificador del producto"
+              type="number"
+              fullWidth
+              variant="standard"
+            />{' '}
+            <TextField
+              value={productToAdd.product_quantity}
+              onChange={handleProductFormChange}
+              autoFocus
+              margin="dense"
+              name="product_quantity"
+              id="product_quantity"
+              label="Cantidad de producto"
+              type="number"
+              fullWidth
+              variant="standard"
+            />{' '}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
               <Button
                 onClick={() => {
-                  setShowForm(false);
+                  addProductToTransaction();
                 }}
               >
-                Guardar
+                Añadir Producto a la transacción
               </Button>
-            </DialogActions>
-          </>
-        )}
+              {formValues.products.length > 0 && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  {formValues.products.map((product, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Typography variant="p" gutterBottom>
+                        Producto: {product.product_id}
+                      </Typography>
+                      <Typography variant="p" gutterBottom>
+                        Cantidad: {product.product_quantity}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowForm(false)}>Cancelar</Button>
+            <Button
+              onClick={() => {
+                addTransaction();
+                setShowForm(false);
+              }}
+            >
+              Guardar
+            </Button>
+          </DialogActions>
+        </>
       </Dialog>
       <Container>
         <Stack direction="row" alignItems="flex-start" justifyContent="space-between" mb={5}>

@@ -14,6 +14,11 @@ export const useTransactions = () => {
     products: [],
   });
 
+  const [productToAdd, setProductToAdd] = useState({
+    product_id: '',
+    product_quantity: '',
+  });
+
   const [isClientTransaction, setIsClientTransaction] = useState(true);
 
   const getTransactions = async () => {
@@ -37,61 +42,51 @@ export const useTransactions = () => {
     }
   };
 
-  // const addProduct = async () => {
-  //   setLoading(true);
+  const addTransaction = async () => {
+    setLoading(true);
 
-  //   const body = JSON.stringify({
-  //     size: formValues.size,
-  //     material: formValues.material,
-  //     style: formValues.style,
-  //     brand: formValues.brand,
-  //     color: formValues.color,
-  //     type: formValues.type,
-  //     product: {
-  //       name: formValues.name,
-  //       price: formValues.price,
-  //       quantity_in_stock: formValues.quantityInStock,
-  //       buy_cost: formValues.buyCost,
-  //       sell_cost: formValues.sellCost,
-  //     },
-  //   });
+    const body = JSON.stringify({
+      ...(isClientTransaction ? { client_id: formValues.clientId } : { provider_id: formValues.providerId }),
+      currency: formValues.currency,
+      payment_method: formValues.paymentMethod,
+      data_payment: formValues.dataPayment,
+      products: formValues.products,
+    });
 
-  //   try {
-  //     const response = await fetch(`${url}/product/garment`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //       },
-  //       body,
-  //     });
-  //     const dataResponse = await response.json();
-  //     throw new Error(dataResponse.message);
-  //   } catch (error) {
-  //     return {};
-  //   } finally {
-  //     getProducts();
-  //     setLoading(false);
-  //     setFormValues(() => ({
-  //       size: '',
-  //       material: '',
-  //       style: '',
-  //       brand: '',
-  //       color: '',
-  //       type: '',
-  //       name: '',
-  //       price: '',
-  //       quantityInStock: '',
-  //       buyCost: '',
-  //       sellCost: '',
-  //     }));
-  //   }
-  // };
+    try {
+      const response = await fetch(`${url}/transaction/${isClientTransaction ? 'client' : 'provider'}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body,
+      });
+      const dataResponse = await response.json();
+      throw new Error(dataResponse.message);
+    } catch (error) {
+      return {};
+    } finally {
+      setLoading(false);
+      getTransactions();
+      setFormValues(() => ({
+        clientId: '',
+        currency: '',
+        paymentMethod: '',
+        dataPayment: '',
+        providerId: '',
+        products: [],
+      }));
+    }
+  };
 
   const handleFormChange = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
+  const handleProductFormChange = (e) => {
+    setProductToAdd({ ...productToAdd, [e.target.name]: e.target.value });
+  };
   // const deleteProvider = async (id) => {
   //   setLoading(true);
   //   try {
@@ -116,6 +111,23 @@ export const useTransactions = () => {
     setIsClientTransaction(e.target.checked);
   };
 
+  const addProductToTransaction = () => {
+    setFormValues({
+      ...formValues,
+      products: [
+        ...formValues.products,
+        {
+          ...productToAdd,
+        },
+      ],
+    });
+
+    setProductToAdd({
+      product_id: 0,
+      product_quantity: 0,
+    });
+  };
+
   useEffect(() => {
     getTransactions();
   }, []);
@@ -127,6 +139,10 @@ export const useTransactions = () => {
     handleFormChange,
     isClientTransaction,
     handleSwitchChange,
-    setFormValues
+    setFormValues,
+    addTransaction,
+    productToAdd,
+    addProductToTransaction,
+    handleProductFormChange,
   };
 };
