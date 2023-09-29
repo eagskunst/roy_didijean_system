@@ -20,9 +20,6 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
-  IconButton,
-  Popover,
-  MenuItem,
   FormGroup,
   FormControlLabel,
   Switch,
@@ -46,7 +43,6 @@ const TABLE_HEAD = [
   { id: 'payment_method', label: 'Método de pago' },
   { id: 'currency', label: 'Divisa' },
   { id: 'productsTotal', label: 'Total de Productos' },
-  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -129,15 +125,6 @@ export default function TransactionsPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  const [open, setOpen] = useState(null);
-
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   return (
     <>
@@ -327,50 +314,6 @@ export default function TransactionsPage() {
                           <TableCell align="left">{paymentMethod}</TableCell>
                           <TableCell align="left">{currency}</TableCell>
                           <TableCell align="left">{product.length}</TableCell>
-
-                          <TableCell align="left">
-                            <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                              <Iconify icon={'eva:more-vertical-fill'} />
-                            </IconButton>
-                          </TableCell>
-                          <Popover
-                            open={Boolean(open)}
-                            anchorEl={open}
-                            onClose={handleCloseMenu}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            PaperProps={{
-                              sx: {
-                                p: 1,
-                                width: 140,
-                                '& .MuiMenuItem-root': {
-                                  px: 1,
-                                  typography: 'body2',
-                                  borderRadius: 0.75,
-                                },
-                              },
-                            }}
-                          >
-                            <MenuItem
-                              onClick={() => {
-                                setShowForm(true);
-                                handleCloseMenu();
-                              }}
-                            >
-                              <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-                              Editar
-                            </MenuItem>
-
-                            <MenuItem
-                              sx={{ color: 'error.main' }}
-                              onClick={() => {
-                                handleCloseMenu();
-                              }}
-                            >
-                              <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-                              Eliminar
-                            </MenuItem>
-                          </Popover>
                         </TableRow>
                       );
                     })}
