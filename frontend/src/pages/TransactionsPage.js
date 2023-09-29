@@ -97,15 +97,8 @@ export default function TransactionsPage() {
 
   const [rowsPerPage] = useState(5);
 
-  const {
-    transactions,
-    loading,
-    isClientTransaction,
-    handleSwitchChange,
-    formValues,
-    handleFormChange,
-    setFormValues,
-  } = useTransactions();
+  const { transactions, loading, isClientTransaction, handleSwitchChange, formValues, handleFormChange } =
+    useTransactions();
 
   const { loading: isLoadingProducts } = useProducts();
   const { providers, loading: isLoadingProviders } = useProviders();
@@ -142,6 +135,7 @@ export default function TransactionsPage() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
   return (
     <>
       <Helmet>
@@ -172,12 +166,9 @@ export default function TransactionsPage() {
                   }
                 />
               </FormGroup>
-              {isClientTransaction &&
-                clients.map((client) => <Chip key={`${new Date()}`} label={client.user.name} onClick={() => {}} />)}
+              {isClientTransaction && clients.map((client, index) => <Chip key={index} label={client.user.name} />)}
               {!isClientTransaction &&
-                providers.map((provider) => (
-                  <Chip key={`${new Date()}`} label={provider.provider.name} onClick={() => {}} />
-                ))}
+                providers.map((provider, index) => <Chip key={index} label={provider.provider.name} />)}
               <TextField
                 value={formValues.currency}
                 onChange={handleFormChange}
