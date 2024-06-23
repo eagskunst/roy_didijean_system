@@ -18,7 +18,7 @@ class TransactionService {
   async create(data) {
     console.log(data)
     if(!data.client_id && !data.provider_id) throw boom.notAcceptable('require client or provider for transaction')
-
+    if(data.products == null || data.products.length <= 0) throw boom.notAcceptable('at least one product is needed for a transaction')
     if (data.client_id){//VENTA cliente
 
       const auxclient = await this.clientService.findOne(data.client_id)
@@ -132,17 +132,6 @@ class TransactionService {
       ]
     });
     return Transaction;
-  }
-
-  async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
-  }
-
-  async delete(id) {
-    return { id };
   }
 
 }
