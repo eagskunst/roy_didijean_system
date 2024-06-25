@@ -19,13 +19,18 @@ class TransactionService {
     console.log(data)
     if(!data.client_id && !data.provider_id) throw boom.notAcceptable('require client or provider for transaction')
     if(data.products == null || data.products.length <= 0) throw boom.notAcceptable('at least one product is needed for a transaction')
+    data.products.forEach(product => {
+      if(product.product_quantity < 0) {
+        throw boom.notAcceptable('quantity for Product 1 unavailable')
+      }
+    });
     if (data.client_id){//VENTA cliente
 
       const auxclient = await this.clientService.findOne(data.client_id)
       if(!auxclient) throw boom.notAcceptable(`client not found`)
 
       for(let i = 0; i < data.products.length; i++ ){
-        const availableAmount =  await this.productService.findOne(data.products[i].product_id)
+        const availableAmount = await this.productService.findOne(data.products[i].product_id)
         if(!availableAmount) throw boom.notAcceptable(`product dont exist`)
         if (data.products[i].product_quantity > availableAmount.quantity_in_stock) throw boom.notAcceptable(`quantity for ${availableAmount.name} unavailable`)
       }

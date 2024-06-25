@@ -1,6 +1,7 @@
 const UserService = require('.');
 const sequelize = require('../../lib/sequelize')
 const models = sequelize.models;
+const boom = require('@hapi/boom');
 
 class AdminService extends UserService {
     constructor() {
@@ -11,6 +12,7 @@ class AdminService extends UserService {
         let transaction
         try {
             transaction = t ?? await sequelize.transaction();
+            if (!data.user) throw boom.badRequest('needs user field')
             const res = await super.create(data.user, transaction)
             const admin = await models.Admin.create({
                 "user_id": res.id,

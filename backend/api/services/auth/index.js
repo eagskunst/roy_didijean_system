@@ -3,11 +3,11 @@ const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt');
 const { config } = require("../../config/config");
 const AdminService = require("../user/admin.service");
-
-const adminService = new AdminService()
-
+let adminService;
 class AuthService {
-  constructor(){}
+  constructor(){
+    adminService = new AdminService()
+  }
 
   async getUser(username, password){
     const admin = await adminService.findByUsername(username);
