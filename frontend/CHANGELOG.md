@@ -2,7 +2,7 @@
 
 ###### Feb 21, 2023
 
-- Upgrade some dependencies to the latest versions
+- Upgrade some dependencies to the latest versions.
 
 ---
 

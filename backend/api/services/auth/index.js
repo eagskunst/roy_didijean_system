@@ -3,20 +3,20 @@ const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt');
 const { config } = require("../../config/config");
 const AdminService = require("../user/admin.service");
-
-const adminService = new AdminService()
-
+let adminService;
 class AuthService {
-  constructor(){}
+  constructor(){
+    adminService = new AdminService()
+  }
 
   async getUser(username, password){
     const admin = await adminService.findByUsername(username);
     if (!admin) {
-      throw boom.notFound(`User not found`);
+      throw boom.badRequest("User or credentials do not match");
     }
     const isMatch = await bcrypt.compare(password, admin.user.password);
     if (!isMatch) {
-      throw boom.badRequest("Password is incorrect");
+      throw boom.badRequest("User or credentials do not match");
     }
     delete admin.user.dataValues.password;
     delete admin.dataValues.user_id;
